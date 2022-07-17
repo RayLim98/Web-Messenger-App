@@ -1,6 +1,5 @@
 const Message = require('../models/messageModel');
 const asyncHandler = require('express-async-handler');
-const { zalgo } = require('colors');
 
 const getMessage = asyncHandler(async (req, res) => {
     const messages = await Message.find()
