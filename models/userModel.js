@@ -1,18 +1,19 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-    name: {
+    userName: {
         type: String,
         required: [true, 'Please add name field']
     },
-    favoriteColor: {
+    password: {
         type: String,
-        required: [true, 'Please add favoriteColor field']
+        required: [true, 'Please add password field']
     },
-}, 
-{
-    timestamps: true
-})
+    }, 
+    {
+        timestamps: true
+    }
+)
 
 
 module.exports = mongoose.model('User', userSchema)
