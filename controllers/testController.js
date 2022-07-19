@@ -1,15 +1,26 @@
 const Message = require('../models/messageModel');
 const asyncHandler = require('express-async-handler');
 
+/**
+ * @description GET 
+ * @route /api/test 
+ * @access private 
+ */
 const getMessage = asyncHandler(async (req, res) => {
-    const messages = await Message.find()
+    const messages = await Message.find({user: req.user.id})
     res.status(200).json(messages)
 })
 
+/**
+ * @description POST 
+ * @route /api/test 
+ * @access private 
+ */
 const createMessage = asyncHandler(async (req, res) => {
     console.log(req.body.message)
     const message = await Message.create({
-        message: req.body.message
+        message: req.body.message,
+        user: req.user.id 
     })
     res.status(200).json(message)
 })

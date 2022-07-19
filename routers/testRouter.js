@@ -6,9 +6,10 @@ const {
     updateMessage,
     deleteMessage
 } = require('../controllers/testController')
+const { authJWT } = require('../middlware/authMiddleware')
 
-router.get('/', getMessage)
-router.post('/', createMessage)
+router.get('/', authJWT ,getMessage)
+router.post('/', authJWT, createMessage)
 router.put('/:id', updateMessage)
 router.delete('/:id', deleteMessage)
 

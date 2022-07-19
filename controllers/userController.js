@@ -4,8 +4,9 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/userModel')
 
 /**
- * @description Login User
- * @route POST /api/user/login
+ * @description POST Login User
+ * @route /api/user/login
+ * @access public
  */
 const loginUser = asyncHandler(async (req, res) => {
     //Check user exist
@@ -30,13 +31,14 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 /**
- * @description Register User
- * @route POST /api/user/register
+ * @description POST Register User
+ * @route /api/user/register
+ * @access public
  */
 const registerUser = asyncHandler(async (req, res) => {
     // Check if input fields exist 
-    const {userName, password} = req.body;
-    if(!userName || !password) {
+    const {userName, password, age} = req.body;
+    if(!userName || !password || !age) {
         res.status(400)
         throw new Error('Missing fields')
     }
@@ -56,6 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const newUser = await User.create({
         userName: userName,
         password: hashedPassword,
+        age: age,
     })
 
     // Check if newuser has been created sucessfully
@@ -65,6 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(201).json({
             _id: newUser._id,
             userName: newUser.userName,
+            age: newUser.age,
             token: generateToken(newUser._id)
         });
     } else {
@@ -74,9 +78,15 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 })
 
+/**
+ * @description GET personal user data
+ * @protected JWT authentication 
+ * @route /api/user
+ * @access private
+ */
 const getUser = asyncHandler(async (req, res) => {
     const user = req.user;
-    res.status(200).json(allUser);
+    res.status(200).json(user);
 })
 
 // Generate JWT as an object, with a field ID inside
