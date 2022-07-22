@@ -1,0 +1,15 @@
+.formWrapper {
+    background-color: aquamarine;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputField {
+    margin-top: 0.5rem;
+}
