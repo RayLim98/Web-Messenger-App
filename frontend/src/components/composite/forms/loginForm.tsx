@@ -9,16 +9,19 @@ interface Inputs {
 const LoginForm = ({ onSubmit}:{ onSubmit: (data:Inputs)=> void} ) => {
   // form hook inputs
   const {register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>()
+
   return (
     <div className = {styles.formWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
         <input 
+          className={styles.inputField}
           {...register("name", { required: true })}
           placeholder={"name"}
           type="text"
         />
         {errors.name && <span>This field is required</span>}
         <input 
+          className={styles.inputField}
           {...register("password", { required: true })}
           placeholder={"password"}
           type="password"

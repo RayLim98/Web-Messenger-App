@@ -1,0 +1,8 @@
+.textWrapper {
+  margin: 0;
+  font-weight: 500;
+}
+
+.hover:hover {
+  color: plum;
+}

@@ -1,8 +1,8 @@
 .mainWrapper {
     background-color: white;
-    border-radius: 50px;
-    width: 100%;
     padding: 1rem;
+    border-radius: 25px;
     padding-left: 4rem;
     padding-right: 4rem;
+    width: 30%;
 }

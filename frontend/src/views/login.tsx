@@ -1,5 +1,7 @@
 import PageWrapper from '../components/core/wrapper/pageWrapper'
 import LoginForm from '../components/composite/forms/loginForm'
+import TextButton from '../components/core/buttons/textButton'
+import '../App.css'
 
 const LoginPage = () => {
   const onSubmit = (data: any) => {
@@ -10,8 +12,19 @@ const LoginPage = () => {
     <PageWrapper>
       <h1>Login</h1>
       <LoginForm onSubmit={onSubmit}/>
-      <h5>Don't have an account? </h5>
-      <h5>Register</h5>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center' ,
+      }}>
+        <h6>
+          Don't have an account?
+        </h6>
+        <TextButton onClick={()=> console.log('hello')}>
+            Register
+        </TextButton>
+      </div>
     </PageWrapper>
   )
 }
