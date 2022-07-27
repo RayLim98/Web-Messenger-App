@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/RayLim98/UserBackEndLearningProject/issues"
   },
-  "homepage": "https://github.com/RayLim98/UserBackEndLearningProject#readme"
+  "homepage": "https://github.com/RayLim98/UserBackEndLearningProject#readme",
+  "devDependencies": {
+    "concurrently": "^7.3.0"
+  }
 }
