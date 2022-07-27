@@ -3,14 +3,18 @@
     display: flex;
     justify-content: center;
     padding: 1rem;
+    max-width: 250px;
+    min-width: 200px;
 }
 
 .form {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
-.inputField {
-    margin-top: 5px;
-    margin-bottom: 5px;
+@media screen and (max-width: 600px) {
+  .formWrapper {
+    padding: 0.5rem;
+  }
 }

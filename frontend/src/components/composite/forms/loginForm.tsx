@@ -1,30 +1,30 @@
 import styles from './form.module.css'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormRegister } from 'react-hook-form'
+import PrimTextInput from '../../core/inputfields/primInput'
+import NumInput from '../../core/inputfields/numInput'
 
-interface Inputs {
-  name: string,
-  password: string,
+interface FormProps {
+  name: string
+  password: string
 }
 
-const LoginForm = ({ onSubmit}:{ onSubmit: (data:Inputs)=> void} ) => {
+const LoginForm = ({ onSubmit}:{ onSubmit: (data:FormProps)=> void} ) => {
   // form hook inputs
-  const {register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>()
-
+  const {register, handleSubmit, watch, formState: { errors } } = useForm<FormProps>()
   return (
     <div className = {styles.formWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <input 
-          className={styles.inputField}
-          {...register("name", { required: true })}
-          placeholder={"name"}
-          type="text"
+        <PrimTextInput
+          placeholder='name'
+          register={register}
+          required={true}
         />
         {errors.name && <span>This field is required</span>}
-        <input 
-          className={styles.inputField}
-          {...register("password", { required: true })}
-          placeholder={"password"}
-          type="password"
+        <PrimTextInput
+          placeholder='password'
+          register={register}
+          required={true}
+          password
         />
         {errors.password && <span>This field is required</span>}
         <input type = "submit"/>

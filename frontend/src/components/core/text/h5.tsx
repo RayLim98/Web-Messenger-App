@@ -1,15 +1,17 @@
 import React from 'react'
 import styles from './style.module.css'
 
-interface HeadInterface{
+interface Props{
     children: React.ReactNode
+    hover?: boolean
 }
 
-const H5: React.FC<HeadInterface> = ({
+const H5: React.FC<Props> = ({
     children,
+    hover,
 }) => {
   return (
-    <h5 className={styles.textWrapper}>
+    <h5 className={`${styles.textWrapper} ${hover? styles.hover: null}`}>
         {children}
     </h5>
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import H5Hover from '../../text/h5Hover'
+import H5 from '../../text/h5'
 import styles from './style.module.css' 
 
 interface Props {
@@ -13,9 +13,9 @@ const TextButton: React.FC<Props> = ({children, onClick}) => {
       className={styles.buttonWrapper} 
       onClick={onClick} 
     >
-      <H5Hover>
+      <H5 hover>
         {children}
-      </H5Hover>
+      </H5>
     </button>
   )
 }

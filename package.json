@@ -1,0 +1,21 @@
+{
+  "name": "loginauthentication",
+  "version": "1.0.0",
+  "description": "frontend and backend development for users logging in",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RayLim98/UserBackEndLearningProject.git"
+  },
+  "author": "Raymond Lim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RayLim98/UserBackEndLearningProject/issues"
+  },
+  "homepage": "https://github.com/RayLim98/UserBackEndLearningProject#readme"
+}
