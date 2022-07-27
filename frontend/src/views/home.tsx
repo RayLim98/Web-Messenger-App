@@ -1,9 +1,27 @@
+import { Navigate } from 'react-router-dom'
 import PageWrapper from '../components/core/wrapper/pageWrapper'
+import { useAuth } from '../context/authProvider'
 
 const Home = () => {
+  const { user, setUser } = useAuth()
+
+  const handleLogout = () => {
+    localStorage.clear()
+    setUser(null);
+  }
+
+  const content = user
+      ? <>  
+          HomePage
+          <button onClick={handleLogout}>
+            log out
+          </button>
+        </>
+      : <Navigate to='/'/>
+
   return (
     <PageWrapper>
-      HomePage
+      {content}
     </PageWrapper>
   )
 }

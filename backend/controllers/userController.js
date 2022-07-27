@@ -12,9 +12,13 @@ const loginUser = asyncHandler(async (req, res) => {
     //Check user exist
     const {userName, password} = req.body;
     const user = await User.findOne({userName})
-
+    if(!user) {
+        res.status(400)
+        throw new Error('User does not exist')
+    }
+    
     //Compare passwords and generate token for authentication
-    if(user, await bcrypt.compare(password, user.password)) {
+    if(await bcrypt.compare(password, user.password)) {
         console.log('User has logged in: ', user)
         res.status(201).json({
             _id: user._id,

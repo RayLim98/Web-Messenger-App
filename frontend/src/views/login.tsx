@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import PageWrapper from '../components/core/wrapper/pageWrapper'
 import LoginForm from '../components/composite/forms/loginForm'
 import { H1, H6 } from '../components/core/text'
@@ -6,25 +6,23 @@ import { H1, H6 } from '../components/core/text'
 import '../App.css'
 
 import loginUser from '../api/loginUser'
-import TextButton from '../components/core/buttons/textButton'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import { useAuth } from '../context/authProvider'
 
 const LoginPage = () => {
   const [loading, setloading] = useState(false)
-  const onSubmit = (data: any) => {
-    loginUser(data)
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => {
-      console.log(err.message)
-    })
+  const { user, login } = useAuth()
+
+  const onSubmit = async (data: any) => { 
+    setloading(true);
+    await login(data);
+    setloading(false)
   }
 
-  const pageState = 
-  loading
-  ? <div>loading</div>
-  : <>
+  const pageState = loading
+  ? <PageWrapper><div style={{width: '100%'}}>loading...</div></PageWrapper>
+  : 
+    <PageWrapper>
       <div style={{
         marginBottom: '20px',
       }}>
@@ -40,21 +38,22 @@ const LoginPage = () => {
         justifyContent: 'center' ,
       }}>
         <H6>Don't have an account?</H6>
-        {/* <TextButton onClick={()=> console.log("hello")} >
-          Register
-        </TextButton> */}
         <Link to="/register">
           <H6 hover>
             Register
           </H6>
         </Link>
       </div>
-    </>
+    </PageWrapper>
 
   return (
-    <PageWrapper>
-      {pageState}
-    </PageWrapper>
+    <>
+      {
+        user 
+        ? <Navigate to = "/home" replace={true}/>
+        : pageState
+      }
+    </>
   )
 }
 

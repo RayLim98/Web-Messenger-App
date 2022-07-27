@@ -8,18 +8,18 @@ import registerUser from '../api/registerUser'
 import loginUser from '../api/loginUser'
 import RegisterForm from '../components/composite/forms/registerForm'
 import { useState } from 'react'
+import { useAuth } from '../context/authProvider'
 
 const RegisterPage = () => {
-  const [loading, setLoading] = useState(false)
-  const onSubmit = (data: any) => 
-    registerUser(data)
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  
+  const [loading, setLoading] = useState(false);
+  const {register} = useAuth();
+
+  const onSubmit = (data: any) => {
+    setLoading(true);
+    register(data);
+    setLoading(false);
+  }
+
   const pageState = 
   loading
   ? <div>loading</div>

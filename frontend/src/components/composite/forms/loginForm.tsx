@@ -1,7 +1,6 @@
 import styles from './form.module.css'
-import { useForm, UseFormRegister } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import PrimTextInput from '../../core/inputfields/primInput'
-import NumInput from '../../core/inputfields/numInput'
 
 interface FormProps {
   name: string
@@ -15,7 +14,7 @@ const LoginForm = ({ onSubmit}:{ onSubmit: (data:FormProps)=> void} ) => {
     <div className = {styles.formWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
         <PrimTextInput
-          placeholder='name'
+          placeholder='userName'
           register={register}
           required={true}
         />
