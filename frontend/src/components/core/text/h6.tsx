@@ -1,12 +1,8 @@
 import React from 'react'
+import { TextProps } from './interface'
 import styles from './style.module.css'
 
-interface HeadInterface{
-    children: React.ReactNode
-    hover?: boolean
-}
-
-const H6: React.FC<HeadInterface> = ({
+const H6: React.FC<TextProps> = ({
     children,
     hover,
 }) => {

@@ -1,4 +1,16 @@
 .inputField {
     margin-top: 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(141, 29, 161);
+    background-color: plum;
+    height: 5vh;
+    max-height: 50px;
+    font-size: 100%;
+    color: whitesmoke
+}
+
+.inputField::placeholder{
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }

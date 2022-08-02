@@ -5,4 +5,5 @@
     min-height: 100vh;
     background-color: rebeccapurple;
     padding: 2rem;
+    box-sizing: border-box;
 }

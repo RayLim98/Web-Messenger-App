@@ -3,19 +3,25 @@ import styles from './style.module.css'
 import { UseFormRegister } from 'react-hook-form'
 
 interface Props {
-    placeholder: string
+    keyValue: string
     register: UseFormRegister<any>
+    placeholder?: string
     required?: boolean
     password?: boolean
 }
 
-const PrimTextInput: React.FC<Props> = ({placeholder, register,required, password}) => {
+/**
+ * @required
+ * @param keyValue string
+ * @param register UseFormRegister<any>
+ */
+const PrimTextInput: React.FC<Props> = ({keyValue, placeholder, register,required, password}) => {
   return (
     <input 
-        className={styles.inputField}
-        placeholder={placeholder}
-        {...register(placeholder, { required: required || false })}
-        type={password? "password": "text"}
+      className={styles.inputField}
+      placeholder={placeholder}
+      {...register(keyValue , { required: required || false, minLength: 8 })}
+      type={password? "password": "text"}
     />
   )
 }

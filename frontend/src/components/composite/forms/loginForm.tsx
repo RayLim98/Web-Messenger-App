@@ -1,6 +1,7 @@
 import styles from './form.module.css'
 import { useForm } from 'react-hook-form'
 import PrimTextInput from '../../core/inputfields/primInput'
+import PrimButton from '../../core/buttons/primaryButton'
 
 interface FormProps {
   name: string
@@ -11,22 +12,26 @@ const LoginForm = ({ onSubmit}:{ onSubmit: (data:FormProps)=> void} ) => {
   // form hook inputs
   const {register, handleSubmit, watch, formState: { errors } } = useForm<FormProps>()
   return (
-    <div className = {styles.formWrapper}>
+    <div className = {styles.mainWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
         <PrimTextInput
-          placeholder='userName'
+          keyValue='userName'
+          placeholder='User Name'
           register={register}
           required={true}
         />
         {errors.name && <span>This field is required</span>}
         <PrimTextInput
-          placeholder='password'
+          keyValue='password'
+          placeholder='Password'
           register={register}
           required={true}
           password
         />
         {errors.password && <span>This field is required</span>}
-        <input type = "submit"/>
+        <PrimButton type='submit'>
+          Login
+        </PrimButton>
       </form>
     </div>
   )

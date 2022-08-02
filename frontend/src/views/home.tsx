@@ -10,18 +10,13 @@ const Home = () => {
     setUser(null);
   }
 
-  const content = user
-      ? <>  
-          HomePage
-          <button onClick={handleLogout}>
-            log out
-          </button>
-        </>
-      : <Navigate to='/'/>
-
   return (
     <PageWrapper>
-      {content}
+        {!user && <Navigate to='/'/>}
+        HomePage
+        <button onClick={handleLogout}>
+          log out
+        </button>
     </PageWrapper>
   )
 }

@@ -4,7 +4,7 @@ import styles from './style.module.css'
 
 interface Props {
     children: React.ReactNode
-    onClick: () => void
+    onClick?: () => void
 }
 
 const TextButton: React.FC<Props> = ({children, onClick}) => {

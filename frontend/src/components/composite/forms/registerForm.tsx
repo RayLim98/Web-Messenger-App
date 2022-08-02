@@ -2,6 +2,8 @@ import NumInput from '../../core/inputfields/numInput';
 import PrimTextInput from '../../core/inputfields/primInput';
 import styles from './form.module.css'
 import { useForm } from 'react-hook-form'
+import PrimButton from '../../core/buttons/primaryButton';
+import PrimText from '../../core/text/primText';
 
 interface FormProps {
   userName: string,
@@ -10,27 +12,36 @@ interface FormProps {
   age: number
 }
 
-const RegisterForm = ({ onSubmit }:{ onSubmit: (data:FormProps)=> void} ) => {
+interface Props  {
+  onSubmit: (data:FormProps) => void
+  isVerified?: boolean
+}
+
+const RegisterForm: React.FC<Props> = ({onSubmit, isVerified}) => {
   // form hook inputs
   const {register, handleSubmit, watch, formState: { errors } } = useForm<FormProps>();
+
   return (
-    <div className = {styles.formWrapper}>
+    <div className = {styles.mainWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
         <PrimTextInput
-          placeholder='userName'
+          keyValue='userName'
+          placeholder='User Name'
           register={register}
           required={true}
         />
         {errors.userName && <span>This field is required</span>}
         <PrimTextInput
-          placeholder='password'
+          keyValue='password'
+          placeholder='Password'
           register={register}
           required={true}
           password={true}
         />
         {errors.password && <span>This field is required</span>}
         <PrimTextInput
-          placeholder='verifyPassword'
+          keyValue='verifyPassword'
+          placeholder='Re-password'
           register={register}
           required={true}
           password={true}
@@ -42,7 +53,10 @@ const RegisterForm = ({ onSubmit }:{ onSubmit: (data:FormProps)=> void} ) => {
           required={true}
         />
         {errors.password && <span>This field is required</span>}
-        <input type = "submit"/>
+        <PrimButton type='submit'>
+          Create Account
+        </PrimButton>
+        {!isVerified && <PrimText>Passwords not the same</PrimText>}
       </form>
     </div>
   )

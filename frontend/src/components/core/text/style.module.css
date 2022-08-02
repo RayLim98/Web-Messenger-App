@@ -4,6 +4,13 @@
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+.error {
+  margin: 0;
+  font-weight: 500;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color:red;
+}
+
 .hover:hover {
   color: plum;
 }

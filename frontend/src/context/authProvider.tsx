@@ -14,15 +14,26 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
         }
     }, [])
     
-    const login = (data:any) => loginUser(data)
-        .then(res => {
+    // const login = (data:any) => loginUser(data)
+    //     .then(res => {
+    //         setUser(res.data);
+    //         localStorage.setItem('user', res.data);
+    //         console.log('Login sucessful: ', res);
+    //     })
+    //     .catch(err => {
+    //         console.log('Login Failed: ', err);
+    //     })
+
+    const login = async (data:any) => {
+        try {
+            const res = await loginUser(data);
             setUser(res.data);
             localStorage.setItem('user', res.data);
             console.log('Login sucessful: ', res);
-        })
-        .catch(err => {
-            console.log('Login Failed: ', err);
-        })
+        } catch(err) {
+            console.log('Login ussucessful: ', err);
+        }
+    }
 
     const register = (data:any) => registerUser(data)
         .then(res => {

@@ -1,43 +1,39 @@
 import PageWrapper from '../components/core/wrapper/pageWrapper'
-import LoginForm from '../components/composite/forms/loginForm'
 import TextButton from '../components/core/buttons/textButton'
 import '../App.css'
-import { H1, H6 } from '../components/core/text'
+import { H6 } from '../components/core/text'
+import styles from './views.module.css'
 
-import registerUser from '../api/registerUser'
-import loginUser from '../api/loginUser'
 import RegisterForm from '../components/composite/forms/registerForm'
 import { useState } from 'react'
 import { useAuth } from '../context/authProvider'
+import LandingBanner from '../components/composite/banner/landingBanner'
+import PrimText from '../components/core/text/primText'
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
+  const [isVerify, setIsVerify] = useState(true);
   const {register} = useAuth();
 
-  const onSubmit = (data: any) => {
-    setLoading(true);
-    register(data);
-    setLoading(false);
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    if(data.password == data.passwordVerify) {
+      setIsVerify(true);
+      setLoading(true);
+      await register(data);
+      setLoading(false);
+    } else {
+      setIsVerify(false);
+    }
   }
 
-  const pageState = 
-  loading
+  const pageState = loading
   ? <div>loading</div>
   : <>
-      <div style={{
-        marginBottom: '20px',
-      }}>
-        <H1>
-          Register
-        </H1>
-      </div>
-      <RegisterForm onSubmit={onSubmit}/>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center' ,
-      }}>
+      <LandingBanner title='User Project'/>
+      <div className={styles.formWrapper}>
+        <RegisterForm onSubmit={onSubmit} isVerified={isVerify}/>
       </div>
     </>
 

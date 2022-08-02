@@ -1,18 +1,20 @@
-.formWrapper {
-    background-color: aquamarine;
+.mainWrapper {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    padding: 1rem;
+    width: 25vw;
+    max-width: 500px;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    width: 100%;
 }
 
-@media screen and (max-width: 600px) {
-  .formWrapper {
+@media screen and (max-width: 1000px) {
+  .mainWrapper {
     padding: 0.5rem;
+    width: 50vw;
+    justify-content: unset;
   }
 }
