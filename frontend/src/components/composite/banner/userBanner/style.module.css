@@ -1,0 +1,26 @@
+.mainWrapper {
+    min-width: 400px;
+}
+
+.bannerWrapper {
+    display: flex;
+    background-color: navy;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.imageWrapper {
+    background-color: white;
+    min-height: 200px;
+    min-width: 200px;
+    margin: 10px;
+}
+
+.imageWrapper:hover {
+    cursor: pointer;
+}
+
+.description {
+
+}
