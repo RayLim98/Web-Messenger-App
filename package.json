@@ -23,9 +23,6 @@
     "concurrently": "^7.3.0"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.0",
-    "@emotion/styled": "^11.10.0",
-    "@mui/material": "^5.9.3",
     "react-dropzone": "^14.2.2"
   }
 }

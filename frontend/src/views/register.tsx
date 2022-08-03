@@ -8,7 +8,6 @@ import RegisterForm from '../components/composite/forms/registerForm'
 import { useState } from 'react'
 import { useAuth } from '../context/authProvider'
 import LandingBanner from '../components/composite/banner/landingBanner'
-import PrimText from '../components/core/text/primText'
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
