@@ -11,6 +11,7 @@ import ModalHeader from '../styledComponents/modalHeader'
 
 const MainModal = () => {
     const {setSelection, image: currentImage, handleClose} = useUserModal()
+
     return (
         <ModalWrapper>
             <ModalHeader title={'Profile Photo'} onClick={()=> handleClose()}/>
@@ -20,8 +21,8 @@ const MainModal = () => {
                 justifyContent:'center',
                 alignItems:'center',
             }}>
-                { currentImage.cropped && <StyledDp src={currentImage.cropped}/> }
-                { !currentImage.cropped && <text> no image... </text> }
+                { currentImage.croppedURLString && <StyledDp src={currentImage.croppedURLString}/> }
+                { !currentImage.croppedURLString && <text> no image... </text> }
             </Box>
             <Box sx={{
                 display: 'flex',
@@ -37,16 +38,17 @@ const MainModal = () => {
 const CropModal = () => {
     const { setImage, setSelection, image: currentImage, handleClose} = useUserModal()
     const [file, setFile] = useState(null)
+
     useEffect(() => {
         if(file) {
             setImage({
                 ...currentImage,
-                cropped: file
+                croppedURLString: file
             })
             setSelection('Profile Photo')
         }
     }, [file])
-    
+
     return (
         <ModalWrapper>
             <ModalHeader title={'Crop Photo'} onClick={()=> handleClose()}/>
@@ -61,10 +63,6 @@ const CropModal = () => {
 
 const UploadModal = () => {
     const { setImage, setSelection, handleClose } = useUserModal()
-    const [file, setFile] = useState({
-        original: null,
-        cropped: null
-    })
     // const onConfirm = () => {
     //     setImage(file)
     //     setSelection('Edit Photo')

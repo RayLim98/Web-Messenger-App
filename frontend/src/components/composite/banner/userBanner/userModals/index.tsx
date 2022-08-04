@@ -3,8 +3,16 @@ import { useState } from 'react'
 import { Dialog } from '@mui/material'
 import { CropModal, MainModal, UploadModal} from './viewModals'
 import { UserModalProps, Selection, PhotoProps } from '../interfaces'
+import { EmptyObject } from 'react-hook-form'
 
-const UserContext = createContext<any>({})
+interface ContextProps {
+    image: PhotoProps
+    setImage: (value: PhotoProps)=> void
+    setSelection: (value: Selection)=> void
+    handleClose: ()=> void
+}
+
+const UserContext = createContext<ContextProps | EmptyObject>({})
 
 const UserModal = ({onClose, open, currentImage}: UserModalProps) => {
     const [image, setImage] = useState<PhotoProps>(currentImage);

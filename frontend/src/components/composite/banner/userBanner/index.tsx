@@ -9,14 +9,14 @@ import getBase64FromUrl from './getBase64'
 const UserBanner = () => {
     const [image, setImage] = useState<PhotoProps>({
         original: null,
-        cropped: null
+        croppedURLString: null
     })
 
     useEffect(() => {
         // Base64 conversion example 
-        if(image.cropped) {
+        if(image.croppedURLString) {
             const getBase64 = async () => {
-                const base64 = await getBase64FromUrl(image.cropped)
+                const base64 = await getBase64FromUrl(image.croppedURLString)
                 console.log('>.............BASE64 output: ', base64)
             }
             getBase64()
@@ -35,7 +35,7 @@ const UserBanner = () => {
     return (
         <div>
             <PhotoWrapper onClick={handleImageClick}>
-                <StyledDp src = {image.cropped}/>
+                <StyledDp src = {image.croppedURLString}/>
             </PhotoWrapper>
             <UserModal open={model} onClose={handleUploadClose} currentImage={image}/>
         </div>

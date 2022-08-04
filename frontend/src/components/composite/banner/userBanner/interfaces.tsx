@@ -2,7 +2,7 @@ export type Selection  =  'Profile Photo' | 'Upload Photo' | 'Edit Photo'
 
 export interface PhotoProps {
     original: any
-    cropped: string | null | undefined
+    croppedURLString: string | null 
 }
 
 export interface UserModalProps {
