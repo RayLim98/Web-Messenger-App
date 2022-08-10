@@ -8,9 +8,12 @@ interface FormProps {
   password: string
 }
 
+
+
 const LoginForm = ({ onSubmit}:{ onSubmit: (data:FormProps)=> void} ) => {
   // form hook inputs
   const {register, handleSubmit, watch, formState: { errors } } = useForm<FormProps>()
+
   return (
     <div className = {styles.mainWrapper}>
       <form className = {styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -28,7 +31,7 @@ const LoginForm = ({ onSubmit}:{ onSubmit: (data:FormProps)=> void} ) => {
           required={true}
           password
         />
-        {errors.password && <span>This field is required</span>}
+        {errors.password && <span>password is missing</span>}
         <PrimButton type='submit'>
           Login
         </PrimButton>

@@ -1,25 +1,48 @@
 import { useAuth } from '../context/authProvider'
 import { Navigate } from 'react-router-dom'
+import { Container, Stack, Typography,  Button, } from '@mui/material'
+import { useMode } from '../App'
 import UserBanner from '../components/composite/banner/userBanner'
-import PageWrapper from '../components/core/wrapper/pageWrapper'
+import AmzInputField from '../components/core/inputfields/amzInput'
 
 const Home = () => {
-  const { user, setUser } = useAuth()
+  const { user, setUser } = useAuth();
+  const { toggleMode } = useMode();
 
   const handleLogout = () => {
-    localStorage.clear()
+    localStorage.clear();
     setUser(null);
   }
 
   return (
-    <PageWrapper>
-        {!user && <Navigate to='/'/>}
-        HomePage
-        <UserBanner/>
-        <button onClick={handleLogout}>
-          log out
-        </button>
-    </PageWrapper>
+    <Container 
+      fixed
+      sx={{ 
+        backgroundColor :"white", 
+        borderRadius: '25px',
+        pt: '1rem',
+      }}
+    >
+      {!user && <Navigate to='/'/>}
+        <Stack>
+          <Stack 
+            width={'100%'} 
+            justifyContent={'center'}
+            alignItems={'center'}
+            sx={{
+              flexDirection: {
+                sm: 'row' ,
+              } 
+            }}
+          >
+            <Typography sx={{mr: '1rem'}} variant={'h3'}> Home Page </Typography>
+            <UserBanner/>
+          </Stack>
+          <AmzInputField/>
+        </Stack>
+        <Button onClick={handleLogout}> Log Out </Button>
+        <Button onClick={toggleMode}> Toggle Display </Button>
+    </Container>
   )
 }
 

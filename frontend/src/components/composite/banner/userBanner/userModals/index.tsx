@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { Dialog } from '@mui/material'
 import { CropModal, MainModal, UploadModal} from './viewModals'
@@ -16,11 +16,19 @@ const UserContext = createContext<ContextProps | EmptyObject>({})
 
 const UserModal = ({onClose, open, currentImage}: UserModalProps) => {
     const [image, setImage] = useState<PhotoProps>(currentImage);
-    const [selection, setSelection] = useState<Selection>('Profile Photo')
+    const [selection, setSelection] = useState<Selection>()
 
-    const handleClose = () => {
-        if(selection == 'Profile Photo') onClose(image)
-        else setSelection('Profile Photo')
+    useEffect(() => {
+        if(currentImage.croppedURLString) {
+            setSelection('Profile Photo')
+        } else {
+            setSelection('Upload Photo')
+        }
+    }, [currentImage])
+    
+
+    const handleClose = () => { 
+        onClose(image) 
     }
 
     const renderContent = () => {

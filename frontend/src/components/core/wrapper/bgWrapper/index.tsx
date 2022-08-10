@@ -1,9 +1,21 @@
 import React from 'react'
-import styles from './style.module.css'
+import { styled } from '@mui/material'
+
+const StyledBg = styled('div')`
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    padding: 2rem;
+    justify-content: center;
+    background-color: ${({theme})=> theme.palette.primary.main};
+    box-sizing: border-box;
+`
 
 const BgWrapper = ({children}: {children: React.ReactNode}) => {
   return (
-    <div className={styles.mainWrapper}>{children}</div>
+    <StyledBg>
+      {children}
+    </StyledBg>
   )
 }
 

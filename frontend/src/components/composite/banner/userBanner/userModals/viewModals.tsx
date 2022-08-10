@@ -37,24 +37,24 @@ const MainModal = () => {
 
 const CropModal = () => {
     const { setImage, setSelection, image: currentImage, handleClose} = useUserModal()
-    const [file, setFile] = useState(null)
+    const [url, setUrl] = useState(null)
 
     useEffect(() => {
-        if(file) {
+        if(url) {
             setImage({
                 ...currentImage,
-                croppedURLString: file
+                croppedURLString: url
             })
             setSelection('Profile Photo')
         }
-    }, [file])
+    }, [url])
 
     return (
         <ModalWrapper>
             <ModalHeader title={'Crop Photo'} onClick={()=> handleClose()}/>
             <CropImage 
                 image={URL.createObjectURL(currentImage.original)} 
-                setCroppedImage={setFile}
+                setCroppedImage={setUrl}
             />
         </ModalWrapper>
     ) 
@@ -63,10 +63,17 @@ const CropModal = () => {
 
 const UploadModal = () => {
     const { setImage, setSelection, handleClose } = useUserModal()
-    // const onConfirm = () => {
-    //     setImage(file)
-    //     setSelection('Edit Photo')
-    // }    
+    const [file, setFile] = useState(undefined);
+    useEffect(() => {
+        if(file) {
+            setImage({
+                original: file,
+                croppedURLString: null
+            })
+            setSelection('Edit Photo')
+        }
+    }, [file])
+    
 
     return (
         <ModalWrapper>
@@ -80,11 +87,8 @@ const UploadModal = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-                <MyDropzone currentImage = {null} setImage={setImage} setSelection={setSelection}/>
+                <MyDropzone currentImage = {null} setImage={setFile}/>
             </Container>
-            {/* <div className={styles.modelSelection}>
-                <Button onClick={onConfirm}>Confirm</Button>
-            </div> */}
         </ModalWrapper>
     )
 }

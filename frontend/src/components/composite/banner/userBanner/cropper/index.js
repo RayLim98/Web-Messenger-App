@@ -19,24 +19,26 @@ const PictureWrapper = styled(Container)`
     flex:5;
 `
 const ControlWrapper = styled(Container)`
-    display: flex;
-    @media screen and (max-width: 600px){
-      flex-direction: column;
-    }
+  display: flex;
+  @media screen and (max-width: 600px){
+    flex-direction: column;
+  }
 `
 
 const SliderWrapper = styled('div')`
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `
 
-const StyledSlider = styled(Slider)`
-  margin-right: 1rem;
-  margin-left: 1rem;
-`
+const StyledSlider = styled(Slider)(({theme})=>({
+  marginRight: '1rem',
+  marginLeft: '1rem',
+  color: theme.palette.primary.contrastText,
+}))
+
 
 const CropImage = ({image, setCroppedImage}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -93,7 +95,7 @@ const CropImage = ({image, setCroppedImage}) => {
           />
         </SliderWrapper>
         <SliderWrapper>
-          <Typography color={'white'}>
+          <Typography color={'primary.text'}>
             Rotate
           </Typography>
           <StyledSlider

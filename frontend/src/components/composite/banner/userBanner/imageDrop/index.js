@@ -2,13 +2,9 @@ import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { StyledDropZone, StyledP } from '../styledComponents/styledDropZone'
 
-const MyDropzone = ({currentImage, setImage, setSelection}) => {
+const MyDropzone = ({currentImage, setImage}) => {
   const onDrop = useCallback(acceptedFiles => {
-    setImage({
-      original: acceptedFiles[0],
-      cropped: null
-    })
-    setSelection('Edit Photo')
+    setImage(acceptedFiles[0])
   }, [])
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, maxFiles: 1})

@@ -1,7 +1,5 @@
-import PageWrapper from '../components/core/wrapper/pageWrapper'
-import TextButton from '../components/core/buttons/textButton'
 import '../App.css'
-import { H6 } from '../components/core/text'
+import PageWrapper from '../components/core/wrapper/pageWrapper'
 import styles from './views.module.css'
 
 import RegisterForm from '../components/composite/forms/registerForm'

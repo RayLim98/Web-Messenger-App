@@ -11,12 +11,12 @@ const PhotoWrapper = ({size, onClick, children}: Props) => {
     <Box 
       sx={{
         display: 'flex',
-        backgroundColor: '#153b60',
-        borderRadius: '15px',
+        borderRadius: '25rem',
         padding: '10px',
         height: `${ size || 10 }rem`,
         width: `${ size || 10 }rem`,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        backgroundColor: 'primary.main',
       }}
       onClick={onClick}
     >

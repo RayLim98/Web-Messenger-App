@@ -1,14 +1,14 @@
 import { styled } from '@mui/material'
 
 const ImageWrapper = styled('div')`
-  background-color: white;
   width: 20rem ;
   aspect-ratio: 1;
+  border-radius: 25rem;
 `
-const StyledImage = styled('img')`
+export const StyledImage = styled('img')`
   width: 100%;
   height: 100%;
-  border-radius: 25rem;
+  border-radius: inherit;
 `
 const StyledDp = ({src}: {src: any}) => {
   return (

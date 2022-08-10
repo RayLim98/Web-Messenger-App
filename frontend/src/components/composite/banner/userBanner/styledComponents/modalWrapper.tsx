@@ -1,14 +1,21 @@
-import { styled } from '@mui/material'
+import { styled, Container, Box } from '@mui/material'
+import { Theme } from '@mui/system'
 
-const ModalWrapper = styled('div')`
-    display: flex;
-    flex:1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #153b60;
-    width: 100%;
-    min-height: 35vh;
-    max-height: 500px;
-`
+interface Props {
+    theme: Theme
+    bgColor?: string
+}
+
+const ModalWrapper = styled(Box)(({theme, bgColor}: Props) => ({
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: bgColor || theme.palette.primary.dark,
+    width: '100%',
+    minHeight: '35vh',
+    maxHeight: '500px',
+})) 
+
 export default ModalWrapper
