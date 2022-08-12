@@ -16,7 +16,7 @@ const LoginPage = () => {
   const { user, login } = useAuth()
 
   const onSubmit = async (data: any) => { 
-    console.log(data)
+    // console.log(data)
     setloading(true);
     await login(data);
     setloading(false)

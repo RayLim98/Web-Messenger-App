@@ -21,33 +21,34 @@ declare module '@mui/material/styles' {
 
 export const light: PaletteOptions = {
   primary: {
-    main: '#5998C5',
+    main: '#1565c0',
   },
   secondary: {
-    main: '#ad1457',
-    light: '#e35183',
-    dark: '#78002e',
+    main: '#A30052',
+  },
+  background: {
+    default: '#ffffff',
+    paper: '#1565c0'
   },
   text: {
     primary: '#000000',
-    secondary: '#ffffff'
-  },
+    secondary: '#A30052',
+  } 
 }
 
 export const dark: PaletteOptions = {
   primary: {
-    main: '#04293A',
-    light: '#041C32',
-    dark: '#064663',
-    contrastText: '#ECB365'
+    main: '#000644',
   },
   secondary: {
-    main: '#ad1457',
-    light: '#e35183',
-    dark: '#78002e',
+    main: '#db3d8d',
+  },
+  background: {
+    default: '#212121',
+    paper: '#1565c0'
   },
   text: {
     primary: '#ffffff',
-    secondary: '#000000'
-  },
+    secondary: '#db3d8d'
+  } 
 }

@@ -1,12 +1,14 @@
+import { useState } from 'react'
 import { useAuth } from '../context/authProvider'
 import { Navigate } from 'react-router-dom'
-import { Container, Stack, Typography,  Button, } from '@mui/material'
+import { Container, Stack, Typography,  Button, Box } from '@mui/material'
 import { useMode } from '../App'
 import UserBanner from '../components/composite/banner/userBanner'
-import AmzInputField from '../components/core/inputfields/amzInput'
+import AmzInputField from '../components/core/inputfields/search-field'
 
 const Home = () => {
   const { user, setUser } = useAuth();
+  const [value, setValue] = useState<string | null>(null)
   const { toggleMode } = useMode();
 
   const handleLogout = () => {
@@ -16,9 +18,8 @@ const Home = () => {
 
   return (
     <Container 
-      fixed
       sx={{ 
-        backgroundColor :"white", 
+        backgroundColor: 'background.default',
         borderRadius: '25px',
         pt: '1rem',
       }}
@@ -35,13 +36,21 @@ const Home = () => {
               } 
             }}
           >
-            <Typography sx={{mr: '1rem'}} variant={'h3'}> Home Page </Typography>
+            <Typography sx={{mr: '1rem'}} variant={'h3'} color={'text.primary'}> Home Page </Typography>
             <UserBanner/>
           </Stack>
-          <AmzInputField/>
+          <AmzInputField value={value} setValue={setValue}/>
         </Stack>
-        <Button onClick={handleLogout}> Log Out </Button>
-        <Button onClick={toggleMode}> Toggle Display </Button>
+        <Button onClick={handleLogout}>
+            <Typography color={'text.secondary'}>
+              Logout
+            </Typography>
+        </Button>
+        <Button onClick={toggleMode}> 
+            <Typography color={'text.secondary'}>
+              Toggle 
+            </Typography>
+         </Button>
     </Container>
   )
 }
