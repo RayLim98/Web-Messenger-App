@@ -20,11 +20,12 @@ const loginUser = asyncHandler(async (req, res) => {
     //Compare passwords and generate token for authentication
     if(await bcrypt.compare(password, user.password)) {
         console.log('User has logged in: ', user)
-        res.status(201).json({
+        const payload = {
             _id: user._id,
             userName: user.userName,
             token: generateToken(user._id)
-        })
+        }
+        res.status(201).json(payload)
     } else {
         res.status(400)
         throw new Error('Invalid credentials')
@@ -66,14 +67,13 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     // Check if newuser has been created sucessfully
-    // ...and generate token to fetch user data
     if(newUser) {
         console.log('User Id is: ',newUser._id)
+        // return 
         res.status(201).json({
             _id: newUser._id,
             userName: newUser.userName,
             age: newUser.age,
-            token: generateToken(newUser._id)
         });
     } else {
         res.status(400).json({
@@ -84,19 +84,49 @@ const registerUser = asyncHandler(async (req, res) => {
 
 /**
  * @description GET personal user data
- * @protected JWT authentication 
+ * @protected required JWT authentication 
  * @route /api/user
  * @access private
  */
 const getUser = asyncHandler(async (req, res) => {
+    console.log("Getting user data: ", req.user)
     const user = req.user;
-    res.status(200).json(user);
+    if( user ) {
+        res.status(200).json(user);
+    } else {
+        res.status(400).json({
+            message: "could not get user data"
+        });
+    }
 })
 
-// Generate JWT as an object, with a field ID inside
+/**
+ * @description PUT update personal user data
+ * @protected required JWT authentication 
+ * @route /api/update
+ * @access private
+ */
+const updateUser = asyncHandler(async(req, res) => {
+    const { image } = req.user;
+})
+
+/**
+ * @description Delete delete user account 
+ * @protected required JWT authentication 
+ * @route /api/delete
+ * @access private
+ */
+const deleteUser = asyncHandler(async(req, res) => {
+    // TODO
+    throw new Error("has not been implemented")
+})
+/**
+ * @description Generate JWT as an object, with a field ID inside
+ * @param id
+ */
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: '30d'
+        expiresIn: '10d'
     })
 }
 
@@ -104,4 +134,6 @@ module.exports = {
     loginUser,
     registerUser,
     getUser,
+    updateUser,
+    deleteUser
 }

@@ -6,23 +6,21 @@ import StyledDp from './styledComponents/styledDisplayPhoto'
 import PhotoWrapper from './styledComponents/photoWrapper'
 import emptyAvatar from './isEmptyDisplay.png'
 
-const UserBanner = () => {
+
+interface Props {
+    userImage: null | string
+}
+
+const UserBanner = ({userImage}: Props) => {
     const [model, setModel] = useState<boolean>(false)
     const [image, setImage] = useState<PhotoProps>({
         original: null,
-        croppedURLString: null
+        croppedURLString: userImage || null
     })
 
-    useEffect(() => {
-        // Base64 conversion example 
-        // if(image.croppedURLString) {
-        //     const getBase64 = async () => {
-        //         const base64 = await getBase64FromUrl(image.croppedURLString)
-        //         console.log('>.............BASE64 output: ', base64)
-        //     }
-        //     getBase64()
-        // }
-    }, [image])
+    // useEffect(() => {
+    //     // Base64 conversion example 
+    // }, [image])
 
     
     const handleImageClick = () => setModel(true) 

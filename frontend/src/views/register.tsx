@@ -14,8 +14,8 @@ const RegisterPage = () => {
 
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    if(data.password == data.passwordVerify) {
+    console.log("Submitted", data);
+    if(data.password === data.passwordVerify) {
       setIsVerify(true);
       setLoading(true);
       await register(data);

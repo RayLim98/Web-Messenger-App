@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../context/authProvider'
 import { Navigate } from 'react-router-dom'
 import { Container, Stack, Typography,  Button, Box } from '@mui/material'
@@ -7,14 +7,24 @@ import UserBanner from '../components/composite/banner/userBanner'
 import AmzInputField from '../components/core/inputfields/search-field'
 
 const Home = () => {
-  const { user, setUser } = useAuth();
-  const [value, setValue] = useState<string | null>(null)
+  const { user, setUser, getUserData } = useAuth();
+  const [userData, setUserData] = useState({
+    image: null,
+    name: null,
+  })
+
   const { toggleMode } = useMode();
 
+  // Clean up on logout
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
   }
+
+  // Update image and name fields 
+  useEffect(()=> { 
+    if(user) getUserData(user.token)
+  }, [])
 
   return (
     <Container 
@@ -37,9 +47,9 @@ const Home = () => {
             }}
           >
             <Typography sx={{mr: '1rem'}} variant={'h3'} color={'text.primary'}> Home Page </Typography>
-            <UserBanner/>
+            <UserBanner userImage={userData.image}/>
           </Stack>
-          <AmzInputField value={value} setValue={setValue}/>
+          {/* <AmzInputField value={value} setValue={setValue}/> */}
         </Stack>
         <Button onClick={handleLogout}>
             <Typography color={'text.secondary'}>

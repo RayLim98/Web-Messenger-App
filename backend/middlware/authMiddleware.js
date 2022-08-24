@@ -20,7 +20,7 @@ const authJWT = asyncHandler(async(req, res, next) => {
             res.status(400).json({
                     message: 'Token is expired or invalid'
             })
-            throw new Error('Not Authorized')
+            throw new Error('ERROR: Not Authorized'.red.underline)
         }
     }
     if(!token) {
