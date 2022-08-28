@@ -11,6 +11,7 @@ const User = require('../models/userModel')
 const loginUser = asyncHandler(async (req, res) => {
     //Check user exist
     const {userName, password} = req.body;
+    // FIND by USERNAME, and remove the password field
     const user = await User.findOne({userName})
     if(!user) {
         res.status(400)
@@ -19,12 +20,13 @@ const loginUser = asyncHandler(async (req, res) => {
     
     //Compare passwords and generate token for authentication
     if(await bcrypt.compare(password, user.password)) {
-        console.log('User has logged in: ', user)
         const payload = {
             _id: user._id,
             userName: user.userName,
+            age: user.age,
             token: generateToken(user._id)
         }
+        console.log('User has logged in: '.green, payload)
         res.status(201).json(payload)
     } else {
         res.status(400)
@@ -32,7 +34,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     //On success
-    res.status(200).json({message: 'User has logged in sucessfully'})
+    res.status(200).json({message: 'User has logged in sucessfully'.green})
 })
 
 /**
@@ -107,7 +109,8 @@ const getUser = asyncHandler(async (req, res) => {
  * @access private
  */
 const updateUser = asyncHandler(async(req, res) => {
-    const { image } = req.user;
+    const { userName } = req.body;
+    const user = await User.findOne({userName})
 })
 
 /**

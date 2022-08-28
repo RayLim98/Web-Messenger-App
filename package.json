@@ -23,6 +23,7 @@
     "concurrently": "^7.3.0"
   },
   "dependencies": {
+    "@types/mongodb": "^4.0.7",
     "react-dropzone": "^14.2.2"
   }
 }

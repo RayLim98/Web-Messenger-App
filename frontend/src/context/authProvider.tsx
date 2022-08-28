@@ -1,18 +1,20 @@
 import React, { createContext, useState, useEffect, useContext} from 'react'
+import { ObjectId } from 'mongodb';
 import getData from '../api/getUser';
 import loginUser from '../api/loginUser';
 import registerUser from '../api/registerUser';
+import getMessageApi from '../api/getMessages';
+import { AxiosResponse } from 'axios';
 
 const AuthContext = createContext<any>({})
 
 interface UserInterface {
-    _id: any
-    userName: string
-    token: string 
+    _id: ObjectId,
+    token: string,
 }
 
 const AuthProvider = ({children}:{children:React.ReactNode}) => {
-    // user value is a JWT stringj
+    // user value is a JWT string
     const [user, setUser] = useState<UserInterface | null>(null);
 
     useEffect(() => {
@@ -26,8 +28,12 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
     
     const login = async (payload:any) => {
         try {
-            const { data } = await loginUser(payload);
+            // Save user 
+            const {data} = await loginUser(payload);
             setUser(data);
+
+            // 
+
             // Store data as a string to avoid VAUGE object output
             localStorage.setItem('user', JSON.stringify(data));
             console.log('Login sucessful: ', data);
@@ -48,18 +54,28 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
      * @description takings in a user token. if verified user can access data 
      * @param token 
      */
-    const getUserData = async (token: string) => {
-        try {
-            const res = await getData(token)
-            console.log("Getting user data: ", res)
-        } catch(err) {
-            console.log("Could not get data", err)
-        }
+    const getUserData = async () => {
+        let res = null;
+        if(user)
+            try {
+                res = await getData(user.token)
+                console.log("Getting user data: ", res)
+                return res.data
+            } catch(err) {
+                console.log("Could not get data", err)
+                return err
+            }
     }
 
     return (
         <AuthContext.Provider
-            value={{user, login, register, setUser, getUserData}}
+            value={{
+                user, 
+                login, 
+                register, 
+                setUser, 
+                getUserData,
+            }}
         >
             {children}
         </AuthContext.Provider>

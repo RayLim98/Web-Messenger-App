@@ -4,7 +4,7 @@ interface Props {
 }
 
 const updateUser = () => {
-    return axios.get('/api/user/me')
+    return axios.put('/api/user/me')
 }
 
 export default updateUser
