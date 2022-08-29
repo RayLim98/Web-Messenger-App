@@ -9,8 +9,10 @@ import { AxiosResponse } from 'axios';
 const AuthContext = createContext<any>({})
 
 interface UserInterface {
-    _id: ObjectId,
-    token: string,
+    _id: ObjectId
+    userName: string
+    age: number
+    token: string
 }
 
 const AuthProvider = ({children}:{children:React.ReactNode}) => {
@@ -19,7 +21,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
 
     useEffect(() => {
         // Check if user has previously logged in
-        const loggedInUser = localStorage.getItem('user')
+        const loggedInUser = localStorage.getItem("user")
         if(loggedInUser) {
             const userJson = JSON.parse(loggedInUser)
             setUser(userJson);
@@ -31,8 +33,6 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
             // Save user 
             const {data} = await loginUser(payload);
             setUser(data);
-
-            // 
 
             // Store data as a string to avoid VAUGE object output
             localStorage.setItem('user', JSON.stringify(data));
@@ -55,10 +55,9 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
      * @param token 
      */
     const getUserData = async () => {
-        let res = null;
         if(user)
             try {
-                res = await getData(user.token)
+                const res = await getData(user.token)
                 console.log("Getting user data: ", res)
                 return res.data
             } catch(err) {

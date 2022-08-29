@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-const User = require('../models/userModel')
 
 const messageSchema = mongoose.Schema(
     {
+        lobbyId: {
+            type: [mongoose.Schema.Types.ObjectId],
+            required: [true, 'Please add a text field'],
+        },
         message: {
             type: String,
             required: [true, 'Please add a text field'],
         },
-        user: {
-            // type: mongoose.Schema.Types.ObjectId,
-            // required: [true, 'Please add a text field'],
-            // ref: 'User'
-            type: mongoose.Schema.Types.ObjectId,
+        userName: {
+            type: String,
             required: [true, 'Please add a text field'],
         },
     },

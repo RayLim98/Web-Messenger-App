@@ -8,7 +8,7 @@ const getData = (token: string) => {
         headers: { Authorization: `Bearer ${token}` }
     }
     return axios.get(
-        '/api/user/me',
+        '/api/user/',
         config
     )
 }

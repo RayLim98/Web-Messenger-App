@@ -17,7 +17,6 @@ const getMessage = asyncHandler(async (req, res) => {
  * @access private 
  */
 const createMessage = asyncHandler(async (req, res) => {
-    console.log(req.body.message)
     const message = await Message.create({
         message: req.body.message,
         user: req.user.id 
@@ -29,9 +28,6 @@ const createMessage = asyncHandler(async (req, res) => {
  * @description PUT
  */
 const updateMessage = asyncHandler(async (req, res) => {
-    console.log(`Update message with id: ${req.params.id}`.green)
-    console.log(req.body)
-
     const message = await Message.findById(`${req.params.id}`)
     if(!message) {
         res.status(400);
@@ -52,7 +48,6 @@ const updateMessage = asyncHandler(async (req, res) => {
  * @description DELETE
  */
 const deleteMessage = asyncHandler(async (req, res) => {
-    console.log(`Delete message with id: ${req.params.id}`.red)
     const message = await Message.findById(`${req.params.id}`)
     if(!message) {
         res.status(400);

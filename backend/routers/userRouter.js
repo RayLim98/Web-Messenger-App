@@ -12,7 +12,7 @@ const {
 const { testMiddleware, testMiddleware2 } = require('../middlware/testMiddleware')
 const { authJWT } = require('../middlware/authMiddleware')
 
-router.get('/me', authJWT, getUser)
+router.get('/', authJWT, getUser)
 router.put('/update', authJWT, updateUser)
 router.post('/register', registerUser)
 router.post('/login', loginUser)

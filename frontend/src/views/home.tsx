@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { io } from 'socket.io-client'
 
 // Components
 import { Container, Stack, Typography,  Button, Box, TextField } from '@mui/material'
@@ -13,13 +14,15 @@ import { useAuth } from '../context/authProvider'
 // API
 import createMessage from '../api/createMessage'
 import getMessageApi from '../api/getMessages'
+import MessageBox from '../components/composite/messageBox'
+import TextButton from '../components/core/buttons/textButton'
+
+const socket = io("http://localhost:3001") ;
 
 const Home = () => {
   const { user, setUser, getUserData } = useAuth();
-  // Input field state
-  const [value, setValue] = useState<string>("")
-  // Message field states
-  const [list, setList] = useState<any>(null)
+  // lobby value 
+  const [lobby, setLobby] = useState<string>("")
 
   // Get theme hook
   const { toggleMode } = useMode();
@@ -30,35 +33,25 @@ const Home = () => {
     setUser(null);
   }
   
-  // Handle Text input change
-  const handleMessage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setValue(event.target.value)
-
-  // Handle submit
-  const handleSubmit = async () => {
-    try {
-      const res = await createMessage(value, user.token)
-      console.log("Sent", res)
-    } catch(err) {
-      console.log("Failed", err)
-    }
-  }
-
+  const handleJoin = () => {
+    socket.emit("join_room", lobby)
+  } 
   // API call to get user message
-  const getMessage = async () => {
-    try {
-      const res = await getMessageApi(user.token);
-      setList(res.data)
-      console.log(res.data)
-    } catch(err) {
-      console.log(err)
-    }
-  }
+  // const getMessage = async () => {
+  //   try {
+  //     const res = await getMessageApi(user.token);
+  //     setState((prev) => ({...prev, list: res.data }))
+  //     console.log(res.data)
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
+  // }
 
   // Update image and name fields 
   useEffect(()=> { 
-    if(user) 
-      getUserData()
-      getMessage()
+    socket.on('message', (arg)=> {
+      console.log("Message from server", arg)
+    })
   }, [])
 
   return (
@@ -87,25 +80,15 @@ const Home = () => {
           {/* <AmzInputField value={value} setValue={setValue}/> */}
         </Stack>
         <Stack>
-            {
-              list && list.map((item:any, id:number) => ( 
-                <div key={id}>
-                  {item.message}
-                </div> 
-               ))
-            }
-        </Stack>
-        <Stack direction={'row'}>
           <TextField 
-            value={value}
-            onChange={handleMessage}
+            value = {lobby} 
+            onChange={(e)=> setLobby(e.target.value)}
           />
-          <Button onClick={handleSubmit}>
-              <Typography>
-                Submit
-              </Typography>
+          <Button onClick={handleJoin} disabled={lobby===""}>
+            Join
           </Button>
         </Stack>
+        <MessageBox socket={socket} lobbyId={lobby} userName={""}/>
         <Button onClick={handleLogout}>
             <Typography color={'text.secondary'}>
               Logout

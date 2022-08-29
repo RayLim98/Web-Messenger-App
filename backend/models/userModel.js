@@ -16,6 +16,9 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add number']
     },
+    lobbies: {
+        type: [mongoose.Schema.Types.ObjectId],
+    },
     }, 
     {
         timestamps: true

@@ -70,7 +70,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Check if newuser has been created sucessfully
     if(newUser) {
-        console.log('User Id is: ',newUser._id)
+        console.log('New registered User. Id: ',newUser._id)
         // return 
         res.status(201).json({
             _id: newUser._id,
@@ -91,9 +91,8 @@ const registerUser = asyncHandler(async (req, res) => {
  * @access private
  */
 const getUser = asyncHandler(async (req, res) => {
-    console.log("Getting user data: ", req.user)
     const user = req.user;
-    if( user ) {
+    if(user) {
         res.status(200).json(user);
     } else {
         res.status(400).json({
