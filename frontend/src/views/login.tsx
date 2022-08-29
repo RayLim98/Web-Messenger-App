@@ -10,13 +10,16 @@ import { H1, H5, H6 } from '../components/core/text'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/authProvider'
 import LandingBanner from '../components/composite/banner/landingBanner'
+import {io} from 'socket.io-client'
+
+const socket = io("http://localhost:3001") ;
 
 const LoginPage = () => {
   const [loading, setloading] = useState(false)
   const { user, login } = useAuth()
 
   const onSubmit = async (data: any) => { 
-    // console.log(data)
+    console.log(data)
     setloading(true);
     await login(data);
     setloading(false)

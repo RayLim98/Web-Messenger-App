@@ -17,12 +17,13 @@ import getMessageApi from '../api/getMessages'
 import MessageBox from '../components/composite/messageBox'
 import TextButton from '../components/core/buttons/textButton'
 
-const socket = io("http://localhost:3001") ;
+const socket = io("http://localhost:3001")
 
 const Home = () => {
   const { user, setUser, getUserData } = useAuth();
   // lobby value 
   const [lobby, setLobby] = useState<string>("")
+  const [isConnected, setIsConnected] = useState(false)
 
   // Get theme hook
   const { toggleMode } = useMode();
@@ -34,25 +35,9 @@ const Home = () => {
   }
   
   const handleJoin = () => {
-    socket.emit("join_room", lobby)
+    console.log("Pressed")
+    socket.emit("ping")
   } 
-  // API call to get user message
-  // const getMessage = async () => {
-  //   try {
-  //     const res = await getMessageApi(user.token);
-  //     setState((prev) => ({...prev, list: res.data }))
-  //     console.log(res.data)
-  //   } catch(err) {
-  //     console.log(err)
-  //   }
-  // }
-
-  // Update image and name fields 
-  useEffect(()=> { 
-    socket.on('message', (arg)=> {
-      console.log("Message from server", arg)
-    })
-  }, [])
 
   return (
     <Container 
@@ -78,13 +63,22 @@ const Home = () => {
             <UserBanner userImage={null}/>
           </Stack>
           {/* <AmzInputField value={value} setValue={setValue}/> */}
+          <Box
+            sx={{
+              width: "100px",
+              height: "50",
+              background: isConnected? 'green': 'red',
+            }}
+          >
+            status
+          </Box>
         </Stack>
         <Stack>
           <TextField 
             value = {lobby} 
             onChange={(e)=> setLobby(e.target.value)}
           />
-          <Button onClick={handleJoin} disabled={lobby===""}>
+          <Button onClick={handleJoin}>
             Join
           </Button>
         </Stack>

@@ -1,55 +1,47 @@
-const express = require("express");
-const http = require("http");
+const express = require("express")
 const cors = require("cors")
+const http = require("http")
+const { Server } = require("socket.io")
+const connectDB = require("./config/db")
 const colors = require("colors");
 const dotenv = require("dotenv").config();
-const connectDB = require("./config/db");
-const port = process.env.PORT || 5000;
-const socketPort = process.env.SOCKETPORT || 3001;
-const { Server } = require("socket.io");
 
-connectDB();
+connectDB()
 
-// Application
-const appMongo = express();
-const appSocket = express();
+const port = 3001;
+
+// express app
+const app = express()
 
 // Middleware
-appSocket.use(cors());
-appMongo.use(cors())
-appMongo.use(express.json())
-appMongo.use(express.urlencoded({extended: false}))
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.use(cors())
 
 // Routes
-appMongo.use("/api/test", require("./routers/testRouter"));
-appMongo.use("/api/user", require("./routers/userRouter"));
+app.use("/api/test", require("./routers/testRouter"));
+app.use("/api/user", require("./routers/userRouter"));
 
-// Socker Server
-const server = http.createServer(appSocket)
+const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
+        origin: 'http://localhost:3000',
+        methods: ["POST", "GET"]
     }
-}) 
-io.on('connection', (socket) => {
-    console.log("User Connected", socket.id)
-    socket.emit("message", "Hello, you have sucessfully connted to the server.")
+})
 
-    socket.on("join_room", (lobbyId)=> {
-        socket.join(lobbyId)
-        socket.emit(`User: ${socket.id} has joined lobby ${lobbyId}`)
+io.on("connection", (socket)=> {
+    const userID = socket.id
+    socket.emit("welcome", "welcome to the server")
+    console.log(userID, ": has connected")
+
+    socket.on("ping", ()=> {
+        console.log(`User ${userID} has pinged server`)
     })
 
-    // wait for client messages
-    socket.on('client_message', (args)=> {
-        console.log(args)
-    })
-
-    socket.disconnect("disconnect", ()=> {
-        console.log("User Disconnected", socket.id)
+    socket.on("disconnect", ()=> {
+        console.log(`User ${userID} has disconnected`)
     })
 })
 
-server.listen(socketPort, ()=> console.log("Socket sever is running on port 3001"))
-appMongo.listen(port, () => console.log(`Server started on port ${port}`));
+server.listen(port, ()=> console.log(`Server has started on ${port}`))
