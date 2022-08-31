@@ -9,22 +9,16 @@ import AmzInputField from '../components/core/inputfields/search-field'
 // Hooks
 import { useMode } from '../App'
 import { useAuth } from '../context/authProvider'
+import { useComm } from '../context/commProvider'
 
 // API
-import createMessage from '../api/createMessage'
-import getMessageApi from '../api/getMessages'
-import MessageBox from '../components/composite/messageBox'
-import TextButton from '../components/core/buttons/textButton'
-import { useComm } from '../context/commProvider'
-import { borderRadius } from '@mui/system'
+import MobileChatView from '../components/composite/messageBox/mobileChatView'
 import MobileHeader from '../components/composite/mobileHeader'
 
 
 const Home = () => {
   const { user, setUser, getUserData, logout } = useAuth();
   const { sendMessage, setLobby, currentLobby, socket } = useComm();
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -46,16 +40,18 @@ const Home = () => {
       sx={{ 
         backgroundColor: "background.default",
         borderRadius: "25px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        // display: "flex",
+        // flexDirection: "column",
+        // alignItems: "center",
+        // height: "inherit",
+        // width: "inherit",
       }}
     >
-      <MobileHeader open = {openDrawer} setOpen = {setOpenDrawer}/>
-      <MessageBox 
+      <MobileHeader lobby={currentLobby} />
+      <MobileChatView 
         socket={socket}
-        lobbyId={""}
-        userName={""}
+        lobbyId={currentLobby}
+        userName={user?.userName}
       /> 
       {/* <Stack direction ={"row"}>
         <Button onClick={handleLogout}>

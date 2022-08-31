@@ -21,6 +21,7 @@ app.use(cors())
 // Routes
 app.use("/api/test", require("./routers/testRouter"));
 app.use("/api/user", require("./routers/userRouter"));
+app.use("/api/lobby", require("./routers/lobbyRouter"));
 
 // Declare as a http server
 const server = http.createServer(app)

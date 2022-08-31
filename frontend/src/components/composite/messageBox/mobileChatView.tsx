@@ -1,23 +1,22 @@
 import React, { useState } from 'react'
-import { AppBar, IconButton, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import { TextField, Button, Typography, Box } from '@mui/material'
 import { Socket } from 'socket.io-client'
-import MenuIcon from '@mui/icons-material/Menu';
-import MainDrawer from '../drawer';
-import MobileHeader from '../mobileHeader';
 
 interface MessageBoxProps {
   socket: Socket
   lobbyId: string
   userName: string
+  // setMessage: (value:string) => void
 }
 
 /**
  * @description
  * Diplays messages and send messages
  */
-const MessageBox = ({socket, lobbyId, userName}: MessageBoxProps) => {
+const MobileChatView = ({socket, lobbyId, userName}: MessageBoxProps) => {
   const [currentMessage, setCurrentMessage] = useState("")
+  const [listMessage, setMessageList] = useState("")
 
   const handleSubmit = () => {
     if(currentMessage !== "" && lobbyId !== "") 
@@ -28,23 +27,39 @@ const MessageBox = ({socket, lobbyId, userName}: MessageBoxProps) => {
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
       })
   }
-
+  
   return (
     <Box sx={{
       height: "100%",
-      display:"flex",
+      width: "100%",
+      display: "flex",
       flexDirection: "column",
     }}>
-      <Stack flex={1} flexDirection="column-reverse">
-        {/* Message List here */}
-        <Typography color={"text.primary"} variant={"h6"}>
+      <Stack 
+        flex={1}
+        direction={"column-reverse"}
+        overflow={"scroll"}
+      >
+        <Typography>
+          hello
+        </Typography>
+        <Typography>
           hello
         </Typography>
       </Stack>
-      <Stack direction={'row'}>
+      <Stack 
+          direction={'row'} 
+          justifyContent={"center"}
+          sx={{
+            marginBottom: "1rem"
+          }}
+        >
         <TextField 
           value={currentMessage}
           onChange={(e)=> setCurrentMessage(e.target.value)}
+          sx={{
+            flex: 1
+          }}
         />
         <Button onClick={handleSubmit}>
             <Typography>
@@ -56,4 +71,4 @@ const MessageBox = ({socket, lobbyId, userName}: MessageBoxProps) => {
   )
 }
 
-export default MessageBox
+export default MobileChatView

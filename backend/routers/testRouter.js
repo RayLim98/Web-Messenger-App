@@ -8,7 +8,7 @@ const {
 } = require('../controllers/testController')
 const { authJWT } = require('../middlware/authMiddleware')
 
-router.get('/', authJWT ,getMessage)
+router.get('/:id', authJWT ,getMessage)
 router.post('/', authJWT, createMessage)
 router.put('/:id', updateMessage)
 router.delete('/:id', deleteMessage)

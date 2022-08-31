@@ -5,6 +5,7 @@ const StyledBg = styled('div')`
     display: flex;
     flex: 1;
     height: 100vh;
+    width: 100vw;
     // padding: 0.5rem;
     justify-content: center;
     background-color: ${({theme})=> theme.palette.primary.main};
