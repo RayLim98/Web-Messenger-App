@@ -22,6 +22,7 @@ app.use(cors())
 app.use("/api/test", require("./routers/testRouter"));
 app.use("/api/user", require("./routers/userRouter"));
 
+// Declare as a http server
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
@@ -30,6 +31,7 @@ const io = new Server(server, {
     }
 })
 
+// Define events
 io.on("connection", (socket)=> {
     const userID = socket.id
     socket.emit("welcome", "welcome to the server")
@@ -37,6 +39,10 @@ io.on("connection", (socket)=> {
 
     socket.on("ping", ()=> {
         console.log(`User ${userID} has pinged server`)
+    })
+
+    socket.on("join_lobby", (lobbyId)=> {
+        socket.join(lobbyId)
     })
 
     socket.on("disconnect", ()=> {

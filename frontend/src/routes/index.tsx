@@ -6,8 +6,10 @@ import LoginPage from '../views/login'
 import RegisterPage from '../views/register'
 import Home from '../views/home'
 import Details from '../views/details'
+import { useAuth } from '../context/authProvider'
 
 const RouteHandler = () => {
+    const {user} = useAuth()
     return (
         <Router> 
             <Routes>

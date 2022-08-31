@@ -2,6 +2,9 @@ const asyncHandler = require('express-async-handler')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/userModel')
+const UserServices = require("../services/UserServices")
+
+const { findUser, validatePassword } = UserServices()
 
 /**
  * @description POST Login User
@@ -11,15 +14,16 @@ const User = require('../models/userModel')
 const loginUser = asyncHandler(async (req, res) => {
     //Check user exist
     const {userName, password} = req.body;
+
     // FIND by USERNAME, and remove the password field
-    const user = await User.findOne({userName})
+    const user = await findUser(userName);
     if(!user) {
         res.status(400)
         throw new Error('User does not exist')
     }
     
     //Compare passwords and generate token for authentication
-    if(await bcrypt.compare(password, user.password)) {
+    if(validatePassword(password, user.password)) {
         const payload = {
             _id: user._id,
             userName: user.userName,

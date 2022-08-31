@@ -1,9 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { io } from 'socket.io-client'
 
 // Components
-import { Container, Stack, Typography,  Button, Box, TextField } from '@mui/material'
+import { Container, Stack, Typography,  Button, Box, TextField, useMediaQuery, useTheme } from '@mui/material'
 import UserBanner from '../components/composite/banner/userBanner'
 import AmzInputField from '../components/core/inputfields/search-field'
 
@@ -16,83 +15,61 @@ import createMessage from '../api/createMessage'
 import getMessageApi from '../api/getMessages'
 import MessageBox from '../components/composite/messageBox'
 import TextButton from '../components/core/buttons/textButton'
+import { useComm } from '../context/commProvider'
+import { borderRadius } from '@mui/system'
+import MobileHeader from '../components/composite/mobileHeader'
 
-const socket = io("http://localhost:3001")
 
 const Home = () => {
-  const { user, setUser, getUserData } = useAuth();
-  // lobby value 
-  const [lobby, setLobby] = useState<string>("")
-  const [isConnected, setIsConnected] = useState(false)
+  const { user, setUser, getUserData, logout } = useAuth();
+  const { sendMessage, setLobby, currentLobby, socket } = useComm();
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   // Get theme hook
   const { toggleMode } = useMode();
 
   // Clean up on logout
-  const handleLogout = () => {
-    localStorage.clear();
-    setUser(null);
-  }
-  
+  const handleLogout = () => logout()
+
   const handleJoin = () => {
-    console.log("Pressed")
-    socket.emit("ping")
-  } 
+    sendMessage();
+   } 
+
+  useEffect(()=> {
+  }, [])
 
   return (
     <Container 
       sx={{ 
-        backgroundColor: 'background.default',
-        borderRadius: '25px',
-        pt: '1rem',
+        backgroundColor: "background.default",
+        borderRadius: "25px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      {!user && <Navigate to='/'/>}
-        <Stack>
-          <Stack 
-            width={'100%'} 
-            justifyContent={'center'}
-            alignItems={'center'}
-            sx={{
-              flexDirection: {
-                sm: 'row' ,
-              } 
-            }}
-          >
-            <Typography sx={{mr: '1rem'}} variant={'h3'} color={'text.primary'}> Home Page </Typography>
-            <UserBanner userImage={null}/>
-          </Stack>
-          {/* <AmzInputField value={value} setValue={setValue}/> */}
-          <Box
-            sx={{
-              width: "100px",
-              height: "50",
-              background: isConnected? 'green': 'red',
-            }}
-          >
-            status
-          </Box>
-        </Stack>
-        <Stack>
-          <TextField 
-            value = {lobby} 
-            onChange={(e)=> setLobby(e.target.value)}
-          />
-          <Button onClick={handleJoin}>
-            Join
-          </Button>
-        </Stack>
-        <MessageBox socket={socket} lobbyId={lobby} userName={""}/>
+      <MobileHeader open = {openDrawer} setOpen = {setOpenDrawer}/>
+      <MessageBox 
+        socket={socket}
+        lobbyId={""}
+        userName={""}
+      /> 
+      {/* <Stack direction ={"row"}>
         <Button onClick={handleLogout}>
-            <Typography color={'text.secondary'}>
-              Logout
-            </Typography>
+          <Typography color={'text.secondary'}>
+            Logout
+          </Typography>
         </Button>
         <Button onClick={toggleMode}> 
-            <Typography color={'text.secondary'}>
-              Toggle 
-            </Typography>
-         </Button>
+          <Typography color={'text.secondary'}>
+            Toggle 
+          </Typography>
+        </Button>
+      </Stack> */}
+      {!user && <Navigate to='/'/>}
     </Container>
   )
 }

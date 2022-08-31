@@ -13,6 +13,7 @@ interface UserInterface {
     userName: string
     age: number
     token: string
+    lobbies: ObjectId[]
 }
 
 const AuthProvider = ({children}:{children:React.ReactNode}) => {
@@ -50,6 +51,11 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
             console.log("Error",err);
         })
 
+    const logout = () => {
+        localStorage.clear();
+        setUser(null);
+    }
+
     /**
      * @description takings in a user token. if verified user can access data 
      * @param token 
@@ -74,6 +80,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
                 register, 
                 setUser, 
                 getUserData,
+                logout,
             }}
         >
             {children}

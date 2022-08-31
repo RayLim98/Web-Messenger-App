@@ -1,4 +1,6 @@
 import { PaletteOptions } from '@mui/material';
+import { ThemeOptions } from '@mui/material';
+import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 declare module '@mui/material/styles' {
     interface Theme {

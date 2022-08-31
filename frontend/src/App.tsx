@@ -1,28 +1,35 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { createTheme, PaletteMode, ThemeOptions, ThemeProvider } from '@mui/material';
+import { createTheme, PaletteMode, ThemeOptions, ThemeProvider, responsiveFontSizes  } from '@mui/material';
 import { AuthProvider } from './context/authProvider';
 import { dark, light } from './themeConfig';
 import BgWrapper from './components/core/wrapper/bgWrapper';
 import RouteHandler from './routes';
+import { CommProvider } from './context/commProvider';
 
-const ModeContext = createContext({ toggleMode: ()=> {}})
+const ModeContext = createContext({ 
+  toggleMode: ()=> {}
+})
 
 function App() {
   const [mode, setMode] = useState<PaletteMode>('light')
 
   const toggleMode = () => setMode(mode === 'light'? 'dark': 'light' )
 
-  const theme = useMemo(()=> createTheme(getDisplayMode(mode)), [mode])
+  let theme = useMemo(()=> createTheme(getThemeOptions(mode)), [mode])
+  theme = responsiveFontSizes(theme);
+
   return (
-    <ModeContext.Provider value={{ toggleMode }}>
-      <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <BgWrapper>
-            <RouteHandler/>
-          </BgWrapper>
-        </AuthProvider>
-      </ThemeProvider>
-    </ModeContext.Provider>
+    <AuthProvider>
+      <CommProvider>
+        <ModeContext.Provider value={{ toggleMode }}>
+          <ThemeProvider theme={theme}>
+            <BgWrapper>
+              <RouteHandler/>
+            </BgWrapper>
+          </ThemeProvider>
+        </ModeContext.Provider>
+      </CommProvider>
+    </AuthProvider>
   );
 }
 
@@ -38,7 +45,7 @@ export const useMode = () => {
   return mode
 }
 
-const getDisplayMode = (mode: PaletteMode): ThemeOptions => ({
+const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
   palette:{
     mode,
     ...(mode ==='light' ? light : dark) 

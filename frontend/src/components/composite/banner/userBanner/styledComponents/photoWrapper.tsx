@@ -7,12 +7,13 @@ interface Props {
 }
 
 const PhotoWrapper = ({size, onClick, children}: Props) => {
+  const padding = size? size/2 : 10;
   return (
     <Box 
       sx={{
         display: 'flex',
         borderRadius: '25rem',
-        padding: '10px',
+        padding: `${padding}px`,
         height: `${ size || 10 }rem`,
         width: `${ size || 10 }rem`,
         cursor: 'pointer',

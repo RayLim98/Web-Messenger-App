@@ -5,7 +5,7 @@ const StyledBg = styled('div')`
     display: flex;
     flex: 1;
     height: 100vh;
-    padding: 2rem;
+    // padding: 0.5rem;
     justify-content: center;
     background-color: ${({theme})=> theme.palette.primary.main};
     box-sizing: border-box;

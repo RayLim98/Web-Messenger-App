@@ -9,9 +9,10 @@ import emptyAvatar from './isEmptyDisplay.png'
 
 interface Props {
     userImage: null | string
+    size?: number
 }
 
-const UserBanner = ({userImage}: Props) => {
+const UserBanner = ({userImage, size}: Props) => {
     const [model, setModel] = useState<boolean>(false)
     const [image, setImage] = useState<PhotoProps>({
         original: null,
@@ -32,11 +33,15 @@ const UserBanner = ({userImage}: Props) => {
 
     return (
         <div>
-            <PhotoWrapper onClick={handleImageClick}>
+            <PhotoWrapper onClick={handleImageClick} size={size}>
                 {image.croppedURLString && <StyledDp src = {image.croppedURLString}/>}
                 {!image.croppedURLString && <StyledDp src = {emptyAvatar}/>}
             </PhotoWrapper>
-            <UserModal open={model} onClose={handleUploadClose} currentImage={image}/>
+            <UserModal 
+                open={model} 
+                onClose={handleUploadClose} 
+                currentImage={image}
+            />
         </div>
     )
 }
