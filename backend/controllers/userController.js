@@ -4,7 +4,11 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/userModel')
 const UserServices = require("../services/UserServices")
 
-const { findUser, validatePassword } = UserServices()
+const { 
+    findUser, 
+    validatePassword,
+    createUser,
+} = UserServices()
 
 /**
  * @description POST Login User
@@ -23,7 +27,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     
     //Compare passwords and generate token for authentication
-    if(validatePassword(password, user.password)) {
+    if(await validatePassword(password, user.password)) {
         const payload = {
             _id: user._id,
             userName: user.userName,
@@ -55,27 +59,18 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // Check if User Name exist 
-    const userExists = await User.findOne({userName});
+    const userExists = await findUser(userName);
     if(userExists) {
         res.status(400)
         throw new Error('User name exist')
     }
 
-    // Protect Password  
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-
     // Create user with current credentials  
-    const newUser = await User.create({
-        userName: userName,
-        password: hashedPassword,
-        age: age,
-    })
+    const newUser = await createUser(userName, password, age)
 
     // Check if newuser has been created sucessfully
     if(newUser) {
         console.log('New registered User. Id: ',newUser._id)
-        // return 
         res.status(201).json({
             _id: newUser._id,
             userName: newUser.userName,
@@ -83,7 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(400).json({
-            message: 'Invalid credentials'
+            message: 'Failed to create user'
         });
     }
 })
@@ -113,7 +108,7 @@ const getUser = asyncHandler(async (req, res) => {
  */
 const updateUser = asyncHandler(async(req, res) => {
     const { userName } = req.body;
-    const user = await User.findOne({userName})
+    const user = await findUser(userName) 
 })
 
 /**

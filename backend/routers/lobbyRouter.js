@@ -11,4 +11,3 @@ router.post('/', createLobby);
 router.delete('/:id', deleteLobby)
 
 module.exports = router
-
