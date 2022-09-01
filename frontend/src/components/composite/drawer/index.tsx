@@ -3,6 +3,8 @@ import React, {useState} from 'react'
 import UserBanner from '../banner/userBanner'
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
+import { useComm } from '../../../context/commProvider';
+import { useAuth } from '../../../context/authProvider';
 
 const lobbyList = [
     'lobby1',
@@ -16,9 +18,11 @@ interface Props {
 }
 
 const MainDrawer = ({open, setOpen, userImage}: Props) => {
-    const [openDrawer, setOpenDrawer] = useState(false);
-    const handleSelection = () => {
+    const {} = useComm()
+    const {logout} = useAuth()
 
+    const handleSelection = () => {
+        
     }
 
     return (
@@ -66,7 +70,7 @@ const MainDrawer = ({open, setOpen, userImage}: Props) => {
                 </List>
                 <Divider/>
                 <ListItem>
-                    <ListItemButton>
+                    <ListItemButton onClick={()=> logout()}>
                         <ListItemText>
                             Logout
                         </ListItemText>

@@ -14,7 +14,7 @@ interface Props {
 }
 
 const MobileHeader = ({lobby}: Props) => {
-    const [open, setOpen] = useState(false)
+    const [drawer, setDrawer] = useState(false)
     const { toggleMode } = useMode()
     const { palette } = useTheme()
     return (
@@ -24,7 +24,7 @@ const MobileHeader = ({lobby}: Props) => {
                     backgroundColor: 'primary.main'
                 }}>
                     <Toolbar>
-                        <IconButton size="large" onClick={()=> setOpen(true)}>
+                        <IconButton size="large" onClick={()=> setDrawer(true)}>
                             <MenuIcon fontSize="inherit"/>
                         </IconButton>
                         <Box sx={{ flex: 1}}>
@@ -41,7 +41,7 @@ const MobileHeader = ({lobby}: Props) => {
                         </IconButton>
                     </Toolbar>
             </AppBar>
-            <MainDrawer open={open} setOpen={setOpen} userImage={null}/>
+            <MainDrawer open={drawer} setOpen={setDrawer} userImage={null}/>
         </>
     )
 }

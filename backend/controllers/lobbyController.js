@@ -1,9 +1,12 @@
 const asyncHandler = require('express-async-handler')
 const Lobby = require("../models/lobbyModel")
 
+/**
+ * @access PUBLIC
+ */
 const getLobby = asyncHandler(async(req,res) => {
-    const { creatorId } = req.body
-    const lobbyDoc = await Lobby.find({creatorId: creatorId});
+    const { lobbyId } = req.body
+    const lobbyDoc = await Lobby.findById(lobbyId);
     if(lobbyDoc) {
         res.status(200).json({
             message: "Lobby found",
@@ -18,10 +21,10 @@ const getLobby = asyncHandler(async(req,res) => {
 })
 
 const createLobby = asyncHandler(async(req,res) => {
-    const {name, creatorId, image} = req.body
+    const {name, author, image} = req.body
     const newLobby = await Lobby.create({
         name: name,
-        creatorId: creatorId, 
+        author: author, 
         image: image
     })
 

@@ -5,8 +5,8 @@ const lobbySchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add name field']
     },
-    creatorId: {
-        type: mongoose.Schema.Types.ObjectId,
+    author: {
+        type: String,
         required: [true, 'Please add creater field'],
     },
     image: {

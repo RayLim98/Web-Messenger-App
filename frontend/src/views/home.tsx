@@ -40,11 +40,6 @@ const Home = () => {
       sx={{ 
         backgroundColor: "background.default",
         borderRadius: "25px",
-        // display: "flex",
-        // flexDirection: "column",
-        // alignItems: "center",
-        // height: "inherit",
-        // width: "inherit",
       }}
     >
       <MobileHeader lobby={currentLobby} />
@@ -53,18 +48,6 @@ const Home = () => {
         lobbyId={currentLobby}
         userName={user?.userName}
       /> 
-      {/* <Stack direction ={"row"}>
-        <Button onClick={handleLogout}>
-          <Typography color={'text.secondary'}>
-            Logout
-          </Typography>
-        </Button>
-        <Button onClick={toggleMode}> 
-          <Typography color={'text.secondary'}>
-            Toggle 
-          </Typography>
-        </Button>
-      </Stack> */}
       {!user && <Navigate to='/'/>}
     </Container>
   )

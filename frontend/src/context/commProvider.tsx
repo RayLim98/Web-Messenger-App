@@ -20,6 +20,7 @@ const CommContext = createContext<ContextProps>({
 const CommProvider = ({children}: CommProviderProps) => {
     const { user } = useAuth()
     const [isConnected, setIsConnected] = useState<boolean>(false)
+    const [lobbyList, setLobbyList] = useState<string>("")
     const [currentLobby, setLobby] = useState<string>("")
 
     const sendMessage = () => {
@@ -40,7 +41,7 @@ const CommProvider = ({children}: CommProviderProps) => {
     },[socket])
 
     useEffect(()=> {
-        user? socket.connect(): socket.disconnect()
+        
     },[user])
     return (
         <CommContext.Provider 

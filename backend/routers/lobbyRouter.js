@@ -5,9 +5,10 @@ const {
     createLobby,
     deleteLobby
 } = require('../controllers/lobbyController');
+const { authJWT } = require('../middlware/authMiddleware')
 
 router.get('/', getLobby)
-router.post('/', createLobby);
+router.post('/', authJWT, createLobby);
 router.delete('/:id', deleteLobby)
 
 module.exports = router
