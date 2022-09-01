@@ -3,22 +3,23 @@ import { ObjectId } from 'mongodb';
 
 interface Props {
     name: string
-    author: ObjectId
     image?: string
 }
 
 /**
  * 
  * @param payload: name, author, image
- * @returns 
+ * @returns LobbyDocument
  */
-const createLobby = (payload: Props) => {
-    const { name, author, image } = payload;
+const createLobby = (payload: Props, token:string) => {
+    const { name, image } = payload;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    }
     return axios.post('/api/lobby',{
         name,
-        author,
         image,
-    })
+    }, config)
 }
 
 export default createLobby

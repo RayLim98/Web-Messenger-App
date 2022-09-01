@@ -1,5 +1,6 @@
 import React, { createContext, SetStateAction, useContext, useEffect, useState } from 'react'
 import { io, Socket } from "socket.io-client"
+import asyncGetLobby from '../api/lobbyAPI/getlobby';
 import { useAuth } from './authProvider';
 
 const socket = io("http://localhost:3001", {
@@ -41,7 +42,10 @@ const CommProvider = ({children}: CommProviderProps) => {
     },[socket])
 
     useEffect(()=> {
-        
+        if(user) {
+            const list = asyncGetLobby(user.token);
+            console.log(list)
+        }
     },[user])
     return (
         <CommContext.Provider 

@@ -17,6 +17,7 @@ const MobileHeader = ({lobby}: Props) => {
     const [drawer, setDrawer] = useState(false)
     const { toggleMode } = useMode()
     const { palette } = useTheme()
+
     return (
         <>
             <AppBar 
@@ -41,7 +42,7 @@ const MobileHeader = ({lobby}: Props) => {
                         </IconButton>
                     </Toolbar>
             </AppBar>
-            <MainDrawer open={drawer} setOpen={setDrawer} userImage={null}/>
+            <MainDrawer open={drawer} setOpen={setDrawer}/>
         </>
     )
 }

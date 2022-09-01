@@ -107,8 +107,24 @@ const getUser = asyncHandler(async (req, res) => {
  * @access private
  */
 const updateUser = asyncHandler(async(req, res) => {
-    const { userName } = req.body;
-    const user = await findUser(userName) 
+    const user = req.user;
+    const { lobbyId } = req.body;
+
+    const update = {
+        lobbies: [...user.lobbies, lobbyId] 
+    }
+
+    const doc = await User.findByIdAndUpdate(user._id, update)
+    if(doc) {
+        res.status(200).json({
+            message: "Sucessfully updated user",
+            data: doc
+        })
+    } else {
+        res.status(400).json({
+            message: "failed ",
+        })
+    }
 })
 
 /**

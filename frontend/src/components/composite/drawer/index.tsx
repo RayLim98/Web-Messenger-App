@@ -5,6 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
+import CreateLobbyModal from '../modals/createLobbyModal';
 
 const lobbyList = [
     'lobby1',
@@ -12,14 +13,15 @@ const lobbyList = [
 ]
 
 interface Props {
-    userImage: null | string
     open: boolean
     setOpen: (value:boolean) => void
 }
 
-const MainDrawer = ({open, setOpen, userImage}: Props) => {
+const MainDrawer = ({open, setOpen}: Props) => {
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const {user, logout} = useAuth()
     const {} = useComm()
-    const {logout} = useAuth()
 
     const handleSelection = () => {
         
@@ -36,13 +38,23 @@ const MainDrawer = ({open, setOpen, userImage}: Props) => {
                 }
             }}
         >
+            <CreateLobbyModal 
+                open={modalOpen}
+                onClose={setModalOpen} 
+            />
             <List>
                 <ListItem>
-                    <UserBanner userImage={userImage} size={7}/>
+                    <ListItemText>
+                        {user?.userName}
+                    </ListItemText>
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <ListItemButton>
+                    <UserBanner userImage={user?.image} size={7}/>
+                </ListItem>
+                <Divider/>
+                <ListItem>
+                    <ListItemButton onClick={()=> setModalOpen(true)}>
                         <ListItemText>
                             Add Server
                         </ListItemText>

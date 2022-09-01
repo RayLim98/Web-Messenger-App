@@ -7,9 +7,6 @@ interface Props {
 
 /**
  * @description logins user with credientials 
- * @param payload {password, username} 
- * @success returns JSON { _id, userName, age, token}
- * @failure return JSON { message }
  * @returns 
  */
 const loginUser = (payload: Props) => {

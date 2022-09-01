@@ -13,7 +13,7 @@ import { useComm } from '../context/commProvider'
 
 // API
 import MobileChatView from '../components/composite/messageBox/mobileChatView'
-import MobileHeader from '../components/composite/mobileHeader'
+import MobileHeader from '../components/composite/headers/mobileHeader'
 
 
 const Home = () => {
@@ -28,9 +28,10 @@ const Home = () => {
   // Clean up on logout
   const handleLogout = () => logout()
 
+  // 
   const handleJoin = () => {
     sendMessage();
-   } 
+  } 
 
   useEffect(()=> {
   }, [])

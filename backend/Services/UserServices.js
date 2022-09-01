@@ -8,7 +8,7 @@ function UserServices() {
      * @returns User document
      */
     const findUser = async (userName) => {
-        return User.findOne({userName});
+        return User.findOne({userName: userName});
     }
 
     /**
