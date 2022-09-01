@@ -5,6 +5,7 @@ const { Server } = require("socket.io")
 const connectDB = require("./config/db")
 const colors = require("colors");
 const dotenv = require("dotenv").config();
+const Message = require("./models/messageModel")
 
 connectDB()
 
@@ -42,8 +43,19 @@ io.on("connection", (socket)=> {
         console.log(`User ${userID} has pinged server`)
     })
 
-    socket.on("join_lobby", (lobbyId)=> {
+    socket.on("join_lobby", ({lobbyId, user})=> {
+        console.log(`${user} has joined ${lobbyId}\n socketId: ${socket.id}`)
         socket.join(lobbyId)
+    })
+
+    socket.on("leave_lobby", ({user, lobbyId})=> {
+        console.log(`${user} has left ${lobbyId}`)
+        socket.leave(lobbyId)
+    })
+
+    socket.on("send_message", (messageDoc)=> {
+        console.log("message received from client: ", messageDoc);
+        socket.to(messageDoc.lobbyId).emit("receive_message", messageDoc)
     })
 
     socket.on("disconnect", ()=> {

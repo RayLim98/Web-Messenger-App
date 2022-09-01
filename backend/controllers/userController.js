@@ -29,9 +29,7 @@ const loginUser = asyncHandler(async (req, res) => {
     //Compare passwords and generate token for authentication
     if(await validatePassword(password, user.password)) {
         const payload = {
-            _id: user._id,
-            userName: user.userName,
-            age: user.age,
+            ...user._doc,
             token: generateToken(user._id)
         }
         console.log('User has logged in: '.green, payload)
@@ -88,6 +86,7 @@ const registerUser = asyncHandler(async (req, res) => {
  * @protected required JWT authentication 
  * @route /api/user
  * @access private
+ * @returns user latest user document from database
  */
 const getUser = asyncHandler(async (req, res) => {
     const user = req.user;

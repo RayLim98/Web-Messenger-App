@@ -1,41 +1,19 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
 // Components
-import { Container, Stack, Typography,  Button, Box, TextField, useMediaQuery, useTheme } from '@mui/material'
-import UserBanner from '../components/composite/banner/userBanner'
-import AmzInputField from '../components/core/inputfields/search-field'
+import { Container} from '@mui/material'
 
 // Hooks
-import { useMode } from '../App'
 import { useAuth } from '../context/authProvider'
 import { useComm } from '../context/commProvider'
 
 // API
-import MobileChatView from '../components/composite/messageBox/mobileChatView'
 import MobileHeader from '../components/composite/headers/mobileHeader'
 
 
 const Home = () => {
-  const { user, setUser, getUserData, logout } = useAuth();
-  const { sendMessage, setLobby, currentLobby, socket } = useComm();
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-
-  // Get theme hook
-  const { toggleMode } = useMode();
-
-  // Clean up on logout
-  const handleLogout = () => logout()
-
-  // 
-  const handleJoin = () => {
-    sendMessage();
-  } 
-
-  useEffect(()=> {
-  }, [])
-
+  const { user } = useAuth();
+  const { currentLobby} = useComm();
   return (
     <Container 
       sx={{ 
@@ -43,12 +21,8 @@ const Home = () => {
         borderRadius: "25px",
       }}
     >
-      <MobileHeader lobby={currentLobby} />
-      <MobileChatView 
-        socket={socket}
-        lobbyId={currentLobby}
-        userName={user?.userName}
-      /> 
+      <MobileHeader lobbyName={currentLobby} />
+      <Outlet/>
       {!user && <Navigate to='/'/>}
     </Container>
   )

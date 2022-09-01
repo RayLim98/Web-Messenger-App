@@ -16,7 +16,7 @@ router.get('/', authJWT, getUser)
 router.put('/update', authJWT, updateUser)
 router.post('/register', registerUser)
 router.post('/login', loginUser)
-router.delete('/delete', deleteUser)
+router.delete('/delete', authJWT, deleteUser)
 
 router.get('/flowtest', testMiddleware, testMiddleware2, async (req, res)=> {
     console.log('test 3 end point has been reached', req.test1, req.test2)

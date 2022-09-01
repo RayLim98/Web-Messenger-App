@@ -17,10 +17,14 @@ const getMessage = asyncHandler(async (req, res) => {
  * @access private 
  */
 const createMessage = asyncHandler(async (req, res) => {
-    const message = await Message.create({
-        message: req.body.message,
-        user: req.user.id 
+    const { lobbyId, message, author} = req.body
+    const newDoc = await Message.create({
+        lobbyId, message, author
     })
+    if(!newDoc) { 
+        res.status(400).json({ message: "failed store message"})
+    }
+
     res.status(200).json(message)
 })
 

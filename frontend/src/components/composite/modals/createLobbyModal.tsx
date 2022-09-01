@@ -21,16 +21,20 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
             try {
                 // Create lobby
                 const res = await createLobby({ name: name, }, user.token).then()
+
                 // use Response with new lobby data and update it to user data
-                const prevDoc = await updateUser({ lobbyId: res.data._id }, user.token)
+                const prevDoc = await updateUser({ 
+                    lobbyId: res.data._id 
+                }, user.token)
                 console.log("Updated document: ", prevDoc)
+
                 // Close on finish
                 handleClose()
             } catch(e){
                 console.log("failed to create lobby", e)
             }
         } else {
-                console.log("Field is emptyk")
+                console.log("Field is empty.")
         }
     }
 

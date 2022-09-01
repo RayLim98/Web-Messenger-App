@@ -1,17 +1,19 @@
+import { ObjectId } from 'mongodb';
 import React, { createContext, SetStateAction, useContext, useEffect, useState } from 'react'
 import { io, Socket } from "socket.io-client"
-import asyncGetLobby from '../api/lobbyAPI/getlobby';
 import { useAuth } from './authProvider';
+import { useNavigate } from "react-router-dom"
 
-const socket = io("http://localhost:3001", {
-    autoConnect: false,
-})
+const socket = io("http://localhost:3001")
 
 const CommContext = createContext<ContextProps>({
     sendMessage: () => {},
     joinLobby: () => {},
+    leaveLobby: () => {},
     createLobby: () => {},
     setLobby: () => {},
+    ping: () => {},
+    lobbyList: [],
     isConnected: false,
     currentLobby: "",
     socket: socket,
@@ -20,40 +22,58 @@ const CommContext = createContext<ContextProps>({
 
 const CommProvider = ({children}: CommProviderProps) => {
     const { user } = useAuth()
+    const navigate = useNavigate()
     const [isConnected, setIsConnected] = useState<boolean>(false)
-    const [lobbyList, setLobbyList] = useState<string>("")
+    const [lobbyList, setLobbyList] = useState<any>(null)
     const [currentLobby, setLobby] = useState<string>("")
 
-    const sendMessage = () => {
+    const sendMessage = async (messageDoc: MessageI) => {
+      socket.emit("send_message", messageDoc)
+    }
+
+    const joinLobby = (lobbyId: string) => {
+        setLobby(lobbyId);
+        socket.emit("join_lobby", {
+            lobbyId: lobbyId,
+            user: user.userName
+        })
+    }
+
+    const leaveLobby = () => {
+        socket.emit("leave_lobby", {
+            lobbyId: currentLobby,
+            user: user.userName
+        })
+    }
+
+    const createLobby = () => { }
+
+    const ping = () => {
         socket.emit("ping")
     }
 
-    const joinLobby = () => {
-        socket.emit("join_lobby", currentLobby)
-    }
-
-    const createLobby = () => {
-
-    }
-
-    useEffect(()=> {
-        socket.on("connect", ()=> setIsConnected(true))
-        socket.on("disconnect", ()=> setIsConnected(false))
-    },[socket])
-
     useEffect(()=> {
         if(user) {
-            const list = asyncGetLobby(user.token);
-            console.log(list)
+            const lobbyList = user.lobbies;
+            console.log("User loaded in with lobbies ", lobbyList)
+            setLobbyList(lobbyList)
         }
-    },[user])
+    },[user, lobbyList])
+
+    useEffect(()=> {
+        navigate(`/home/${currentLobby}`)
+    },[currentLobby])
+
     return (
         <CommContext.Provider 
             value = {{
                sendMessage, 
                joinLobby,
+               leaveLobby,
                createLobby,
                setLobby,
+               ping,
+               lobbyList,
                isConnected,
                currentLobby,
                socket,
@@ -78,15 +98,26 @@ interface CommProviderProps {
 }
 
 interface ContextProps {
-    sendMessage: () => void,
-    joinLobby: () => void,
+    sendMessage: (messageDoc: MessageI) => void,
+    joinLobby: (lobbyId: string) => void,
+    leaveLobby: () => void,
     createLobby: () => void,
+    ping: () => void,
     setLobby: (value: string) => void,
+    lobbyList: ObjectId[],
     isConnected: boolean,
     currentLobby: string,
     socket: Socket,
 }
 
-interface MessageProps {
+export interface MessageI {
+    lobbyId: string
+    message: string
+    author: string
+}
 
+export interface LobbyI {
+    name: string
+    author: string
+    image?: string
 }

@@ -5,6 +5,7 @@ import { dark, light } from './themeConfig';
 import BgWrapper from './components/core/wrapper/bgWrapper';
 import RouteHandler from './routes';
 import { CommProvider } from './context/commProvider';
+import { BrowserRouter } from 'react-router-dom';
 
 const ModeContext = createContext({ 
   toggleMode: ()=> {}
@@ -19,17 +20,19 @@ function App() {
   theme = responsiveFontSizes(theme);
 
   return (
-    <AuthProvider>
-      <CommProvider>
-        <ModeContext.Provider value={{ toggleMode }}>
-          <ThemeProvider theme={theme}>
-            <BgWrapper>
-              <RouteHandler/>
-            </BgWrapper>
-          </ThemeProvider>
-        </ModeContext.Provider>
-      </CommProvider>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <CommProvider>
+          <ModeContext.Provider value={{ toggleMode }}>
+            <ThemeProvider theme={theme}>
+              <BgWrapper>
+                <RouteHandler/>
+              </BgWrapper>
+            </ThemeProvider>
+          </ModeContext.Provider>
+        </CommProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

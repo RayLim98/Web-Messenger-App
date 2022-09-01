@@ -7,9 +7,10 @@ import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
 import CreateLobbyModal from '../modals/createLobbyModal';
 
-const lobbyList = [
-    'lobby1',
-    'lobby2',
+const lobbies= [
+    "Room1",
+    "Room2",
+    "Room3",
 ]
 
 interface Props {
@@ -19,12 +20,14 @@ interface Props {
 
 const MainDrawer = ({open, setOpen}: Props) => {
     const [modalOpen, setModalOpen] = useState(false)
-
     const {user, logout} = useAuth()
-    const {} = useComm()
+    const {setLobby, leaveLobby, joinLobby} = useComm()
 
-    const handleSelection = () => {
-        
+    const handleSelection = (value: string) => {
+        leaveLobby()
+        setLobby(value)
+        joinLobby(value)
+        setOpen(false)
     }
 
     return (
@@ -67,17 +70,15 @@ const MainDrawer = ({open, setOpen}: Props) => {
                     }}
                 >
                     {
-                        lobbyList.map((item)=> {
-                            return (
-                                <ListItem>
-                                    <ListItemButton onClick={handleSelection}>
-                                        <Typography variant="h5">
-                                            {item}
-                                        </Typography>
-                                    </ListItemButton>
-                                </ListItem>
-                            )
-                        })
+                        lobbies.map((item, idx)=> ( 
+                            <ListItem key={idx}>
+                                <ListItemButton onClick={()=> handleSelection(item)}>
+                                    <Typography>
+                                        {item}
+                                    </Typography>
+                                </ListItemButton>
+                            </ListItem>
+                         ))
                     }
                 </List>
                 <Divider/>

@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const messageSchema = mongoose.Schema(
     {
         lobbyId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             required: [true, 'Please add a text field'],
         },
         message: {
             type: String,
             required: [true, 'Please add a text field'],
         },
-        userName: {
+        author: {
             type: String,
             required: [true, 'Please add a text field'],
         },

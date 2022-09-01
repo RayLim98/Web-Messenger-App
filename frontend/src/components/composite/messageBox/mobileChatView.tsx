@@ -1,32 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Stack } from '@mui/material'
 import { TextField, Button, Typography, Box } from '@mui/material'
 import { Socket } from 'socket.io-client'
+import { ObjectId } from 'mongodb'
+import { useComm, MessageI} from '../../../context/commProvider'
+import createMessage from '../../../api/createMessage'
+import { useAuth } from '../../../context/authProvider'
 
 interface MessageBoxProps {
-  socket: Socket
   lobbyId: string
   userName: string
-  // setMessage: (value:string) => void
 }
 
 /**
  * @description
  * Diplays messages and send messages
  */
-const MobileChatView = ({socket, lobbyId, userName}: MessageBoxProps) => {
+const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
   const [currentMessage, setCurrentMessage] = useState("")
-  const [listMessage, setMessageList] = useState("")
+  const [messageList, setMessageList] = useState<string[]>(["hello"])
+  const { user } = useAuth()
+  const { sendMessage, socket } = useComm()
 
-  const handleSubmit = () => {
-    if(currentMessage !== "" && lobbyId !== "") 
-      socket.emit("client_message", {
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        lobbyId: lobbyId,
         message: currentMessage,
-        userName,
-        lobbyId,
-        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
-      })
+        author: userName
+      }
+      const res = await createMessage(payload, user.token)
+      if(res) {
+        sendMessage({ ...payload })
+      }
+    } catch(e) {
+
+    }
+    setMessageList(list => [currentMessage, ...list])
+    setCurrentMessage("")
   }
+
+  useEffect(() => {
+    socket.on("receive_message", (messageDoc) => {
+      setMessageList(list => [messageDoc.message,...list])
+    })
+
+    return() => {
+      socket.off("receive_message")
+    }
+  }, [socket])
   
   return (
     <Box sx={{
@@ -40,12 +62,13 @@ const MobileChatView = ({socket, lobbyId, userName}: MessageBoxProps) => {
         direction={"column-reverse"}
         overflow={"scroll"}
       >
-        <Typography>
-          hello
-        </Typography>
-        <Typography>
-          hello
-        </Typography>
+        {
+          messageList.map((item, idx)=> ( 
+            <Typography variant='h6' key={idx}>
+              {item}
+            </Typography>
+          ))
+        }
       </Stack>
       <Stack 
           direction={'row'} 

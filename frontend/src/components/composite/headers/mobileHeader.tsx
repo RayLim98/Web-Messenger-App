@@ -10,10 +10,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 interface Props {
-    lobby: string
+    lobbyName: string
 }
 
-const MobileHeader = ({lobby}: Props) => {
+const MobileHeader = ({lobbyName}: Props) => {
     const [drawer, setDrawer] = useState(false)
     const { toggleMode } = useMode()
     const { palette } = useTheme()
@@ -30,7 +30,7 @@ const MobileHeader = ({lobby}: Props) => {
                         </IconButton>
                         <Box sx={{ flex: 1}}>
                             <Typography variant={"h4"}>
-                                LobbyID here
+                                {lobbyName}
                             </Typography>
                         </Box>
                         <IconButton size="large" onClick={()=> toggleMode()}>

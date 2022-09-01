@@ -5,6 +5,7 @@ import loginUser from '../api/loginUser';
 import registerUser from '../api/registerUser';
 import getMessageApi from '../api/getMessages';
 import { AxiosResponse } from 'axios';
+import { LocalSeeOutlined } from '@mui/icons-material';
 
 const AuthContext = createContext<any>({})
 
@@ -23,6 +24,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
     useEffect(() => {
         // Check if user has previously logged in
         const loggedInUser = localStorage.getItem("user")
+        console.log(loggedInUser)
         if(loggedInUser) {
             const userJson = JSON.parse(loggedInUser)
             setUser(userJson);
