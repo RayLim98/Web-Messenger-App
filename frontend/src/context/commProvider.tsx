@@ -60,10 +60,6 @@ const CommProvider = ({children}: CommProviderProps) => {
         }
     },[user, lobbyList])
 
-    useEffect(()=> {
-        navigate(`/home/${currentLobby}`)
-    },[currentLobby])
-
     return (
         <CommContext.Provider 
             value = {{

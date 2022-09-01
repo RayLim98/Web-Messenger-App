@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb'
 import { useComm, MessageI} from '../../../context/commProvider'
 import createMessage from '../../../api/createMessage'
 import { useAuth } from '../../../context/authProvider'
+import getMessageApi from '../../../api/getMessages'
 
 interface MessageBoxProps {
   lobbyId: string
@@ -18,17 +19,17 @@ interface MessageBoxProps {
  */
 const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
   const [currentMessage, setCurrentMessage] = useState("")
-  const [messageList, setMessageList] = useState<string[]>(["hello"])
+  const [messageList, setMessageList] = useState<any[]>([])
   const { user } = useAuth()
-  const { sendMessage, socket } = useComm()
+  const { sendMessage, socket, currentLobby } = useComm()
 
   const handleSubmit = async () => {
+    const payload = {
+      lobbyId: lobbyId,
+      message: currentMessage,
+      author: userName
+    }
     try {
-      const payload = {
-        lobbyId: lobbyId,
-        message: currentMessage,
-        author: userName
-      }
       const res = await createMessage(payload, user.token)
       if(res) {
         sendMessage({ ...payload })
@@ -36,19 +37,32 @@ const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
     } catch(e) {
 
     }
-    setMessageList(list => [currentMessage, ...list])
+    setMessageList((list:any) => [payload, ...list])
     setCurrentMessage("")
   }
 
   useEffect(() => {
     socket.on("receive_message", (messageDoc) => {
-      setMessageList(list => [messageDoc.message,...list])
+      setMessageList((list:any) => [messageDoc.message,...list])
     })
 
     return() => {
       socket.off("receive_message")
     }
   }, [socket])
+  
+  useEffect(() => {
+    const loadMessages = async ()=> {
+      try {
+        const messages = await getMessageApi(currentLobby, user.token)
+        console.log(messages) 
+        setMessageList(messages.data)
+      } catch(e: any) {
+        throw new Error("Failed to get message", e)
+      }
+    }
+    loadMessages()
+  }, [currentLobby])
   
   return (
     <Box sx={{
@@ -63,9 +77,9 @@ const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
         overflow={"scroll"}
       >
         {
-          messageList.map((item, idx)=> ( 
+          messageList.map((item:any, idx: number)=> ( 
             <Typography variant='h6' key={idx}>
-              {item}
+              {item.message}
             </Typography>
           ))
         }

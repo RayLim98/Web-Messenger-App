@@ -1,16 +1,16 @@
-import { Drawer, Typography, Button, ListItem, List, ListItemButton, Divider, IconButton, ListItemText, ListItemIcon } from '@mui/material'
-import React, {useState} from 'react'
+import { Drawer, Typography, ListItem, List, ListItemButton, Divider, IconButton, ListItemText, ListItemIcon } from '@mui/material'
+import React, {useState, useEffect} from 'react'
 import UserBanner from '../banner/userBanner'
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
 import CreateLobbyModal from '../modals/createLobbyModal';
+import { useNavigate } from 'react-router-dom';
 
 const lobbies= [
-    "Room1",
-    "Room2",
-    "Room3",
+    "Public1",
+    "Public2",
 ]
 
 interface Props {
@@ -22,11 +22,13 @@ const MainDrawer = ({open, setOpen}: Props) => {
     const [modalOpen, setModalOpen] = useState(false)
     const {user, logout} = useAuth()
     const {setLobby, leaveLobby, joinLobby} = useComm()
+    const navigate = useNavigate()
 
     const handleSelection = (value: string) => {
         leaveLobby()
         setLobby(value)
         joinLobby(value)
+        navigate(`/home/${value}`)
         setOpen(false)
     }
 
@@ -51,7 +53,6 @@ const MainDrawer = ({open, setOpen}: Props) => {
                         {user?.userName}
                     </ListItemText>
                 </ListItem>
-                <Divider/>
                 <ListItem>
                     <UserBanner userImage={user?.image} size={7}/>
                 </ListItem>

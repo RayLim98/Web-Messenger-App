@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const {
-    getMessage,
+    getMessageByName,
     createMessage,
     updateMessage,
     deleteMessage
 } = require('../controllers/testController')
 const { authJWT } = require('../middlware/authMiddleware')
 
-router.get('/:id', authJWT ,getMessage)
+router.get('/:name', authJWT , getMessageByName)
 router.post('/', authJWT, createMessage)
 router.put('/:id', updateMessage)
 router.delete('/:id', deleteMessage)

@@ -6,8 +6,13 @@ const asyncHandler = require('express-async-handler');
  * @route /api/test 
  * @access private 
  */
-const getMessage = asyncHandler(async (req, res) => {
-    const messages = await Message.find({user: req.user.id})
+const getMessageByName = asyncHandler(async (req, res) => {
+    const id = req.params.name
+    console.log("Fetcedh with params", id)
+    const messages = await Message.find({lobbyId: id}).limit(30).lean().sort({createdAt: -1})
+    if(!messages) {
+        res.status(400).json(messages)
+    }
     res.status(200).json(messages)
 })
 
@@ -19,8 +24,11 @@ const getMessage = asyncHandler(async (req, res) => {
 const createMessage = asyncHandler(async (req, res) => {
     const { lobbyId, message, author} = req.body
     const newDoc = await Message.create({
-        lobbyId, message, author
+        lobbyId, 
+        message, 
+        author,
     })
+
     if(!newDoc) { 
         res.status(400).json({ message: "failed store message"})
     }
@@ -64,7 +72,7 @@ const deleteMessage = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
-    getMessage,
+    getMessageByName,
     createMessage,
     updateMessage,
     deleteMessage
