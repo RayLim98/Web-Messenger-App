@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import getData from '../api/getUser';
 import loginUser from '../api/loginUser';
 import registerUser from '../api/registerUser';
-import getMessageApi from '../api/getMessages';
+import getMessageByLobbyId from '../api/getMessages';
 import { AxiosResponse } from 'axios';
 import { LocalSeeOutlined } from '@mui/icons-material';
 

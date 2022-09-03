@@ -1,14 +1,15 @@
 const Message = require('../models/messageModel');
 const asyncHandler = require('express-async-handler');
+const { ObjectId } = require('mongodb');
 
 /**
  * @description GET 
  * @route /api/test 
  * @access private 
  */
-const getMessageByName = asyncHandler(async (req, res) => {
-    const id = req.params.name
-    console.log("Fetcedh with params", id)
+const getMessageByLobbyId = asyncHandler(async (req, res) => {
+    const id = req.params.lobbyId
+    console.log("fetched with params", id)
     const messages = await Message.find({lobbyId: id}).limit(30).lean().sort({createdAt: -1})
     if(!messages) {
         res.status(400).json(messages)
@@ -72,7 +73,7 @@ const deleteMessage = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
-    getMessageByName,
+    getMessageByLobbyId,
     createMessage,
     updateMessage,
     deleteMessage

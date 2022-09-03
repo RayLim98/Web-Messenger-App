@@ -21,7 +21,7 @@ const Home = () => {
         borderRadius: "25px",
       }}
     >
-      <MobileHeader lobbyName={currentLobby} />
+      <MobileHeader lobbyTitle={currentLobby.title} />
       <Outlet/>
       {!user && <Navigate to='/'/>}
     </Container>

@@ -1,69 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { Stack } from '@mui/material'
 import { TextField, Button, Typography, Box } from '@mui/material'
-import { Socket } from 'socket.io-client'
-import { ObjectId } from 'mongodb'
-import { useComm, MessageI} from '../../../context/commProvider'
-import createMessage from '../../../api/createMessage'
 import { useAuth } from '../../../context/authProvider'
-import getMessageApi from '../../../api/getMessages'
+import { useComm } from '../../../context/commProvider'
+import MessageI from '../../../interface/MessageI'
+import LobbyI from '../../../interface/LobbyI'
 
 interface MessageBoxProps {
-  lobbyId: string
+  lobby: LobbyI
   userName: string
+  inputValue: string
+  setInputValue: (value: string) => void
+  messageList: MessageI[]
+  submitMessage: () => void
 }
 
 /**
  * @description
  * Diplays messages and send messages
  */
-const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
-  const [currentMessage, setCurrentMessage] = useState("")
-  const [messageList, setMessageList] = useState<any[]>([])
-  const { user } = useAuth()
-  const { sendMessage, socket, currentLobby } = useComm()
-
-  const handleSubmit = async () => {
-    const payload = {
-      lobbyId: lobbyId,
-      message: currentMessage,
-      author: userName
-    }
-    try {
-      const res = await createMessage(payload, user.token)
-      if(res) {
-        sendMessage({ ...payload })
-      }
-    } catch(e) {
-
-    }
-    setMessageList((list:any) => [payload, ...list])
-    setCurrentMessage("")
-  }
-
-  useEffect(() => {
-    socket.on("receive_message", (messageDoc) => {
-      setMessageList((list:any) => [messageDoc.message,...list])
-    })
-
-    return() => {
-      socket.off("receive_message")
-    }
-  }, [socket])
-  
-  useEffect(() => {
-    const loadMessages = async ()=> {
-      try {
-        const messages = await getMessageApi(currentLobby, user.token)
-        console.log(messages) 
-        setMessageList(messages.data)
-      } catch(e: any) {
-        throw new Error("Failed to get message", e)
-      }
-    }
-    loadMessages()
-  }, [currentLobby])
-  
+const MobileChatView = ({
+  submitMessage, 
+  messageList, 
+  inputValue,
+  setInputValue, 
+}: MessageBoxProps) => {
   return (
     <Box sx={{
       height: "100%",
@@ -92,13 +53,13 @@ const MobileChatView = ({lobbyId, userName}: MessageBoxProps) => {
           }}
         >
         <TextField 
-          value={currentMessage}
-          onChange={(e)=> setCurrentMessage(e.target.value)}
+          value={inputValue}
+          onChange={(e)=> setInputValue(e.target.value)}
           sx={{
             flex: 1
           }}
         />
-        <Button onClick={handleSubmit}>
+        <Button onClick={submitMessage}>
             <Typography>
               Send
             </Typography>

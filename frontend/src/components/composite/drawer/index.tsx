@@ -1,16 +1,39 @@
-import { Drawer, Typography, ListItem, List, ListItemButton, Divider, IconButton, ListItemText, ListItemIcon } from '@mui/material'
-import React, {useState, useEffect} from 'react'
-import UserBanner from '../banner/userBanner'
+import { 
+    Drawer, 
+    Typography, 
+    ListItem, 
+    List, 
+    ListItemButton, 
+    Divider, 
+    ListItemText, 
+} from '@mui/material'
+import {useState} from 'react'
+// Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
+// Hooks
 import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
-import CreateLobbyModal from '../modals/createLobbyModal';
 import { useNavigate } from 'react-router-dom';
+import UserBanner from '../banner/userBanner'
+import CreateLobbyModal from '../modals/createLobbyModal';
+//interfaces
+import LobbyI from '../../../interface/LobbyI';
+import { ObjectID } from 'bson';
 
-const lobbies= [
-    "Public1",
-    "Public2",
+const lobbies: LobbyI[]= [
+  {
+    id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
+    title: "MyLobby",
+    author: "raymodnlim",
+    image: ""
+  },
+  {
+    id: new ObjectID("6312ce58c6a43a065e6d0776").toString(),
+    title: "Public",
+    author: "raymondlim",
+    image: ""
+  }
 ]
 
 interface Props {
@@ -21,14 +44,10 @@ interface Props {
 const MainDrawer = ({open, setOpen}: Props) => {
     const [modalOpen, setModalOpen] = useState(false)
     const {user, logout} = useAuth()
-    const {setLobby, leaveLobby, joinLobby} = useComm()
-    const navigate = useNavigate()
+    const { joinLobby } = useComm()
 
-    const handleSelection = (value: string) => {
-        leaveLobby()
-        setLobby(value)
-        joinLobby(value)
-        navigate(`/home/${value}`)
+    const handleSelection = (selection: LobbyI) => {
+        joinLobby(selection)
         setOpen(false)
     }
 
@@ -75,7 +94,7 @@ const MainDrawer = ({open, setOpen}: Props) => {
                             <ListItem key={idx}>
                                 <ListItemButton onClick={()=> handleSelection(item)}>
                                     <Typography>
-                                        {item}
+                                        {item.title}
                                     </Typography>
                                 </ListItemButton>
                             </ListItem>

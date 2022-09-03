@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MessageI } from '../context/commProvider';
+import MessageI from '../interface/MessageI';
 
 /**
  * @description Gets data user data if use if token is valid

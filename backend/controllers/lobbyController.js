@@ -1,11 +1,10 @@
 const asyncHandler = require('express-async-handler')
 const Lobby = require("../models/lobbyModel")
-const User = require("../models/userModel")
 
 /**
  * @access PUBLIC
  */
-const getLobby = asyncHandler(async(req,res) => {
+const getLobbyById = asyncHandler(async(req,res) => {
     const { lobbyId } = req.body
     const lobbyDoc = await Lobby.findById(lobbyId);
     if(lobbyDoc) {
@@ -20,7 +19,6 @@ const getLobby = asyncHandler(async(req,res) => {
         })
     }
 })
-
 
 /**
  * @access PRIVATE, BearerToken
@@ -72,7 +70,7 @@ const deleteLobby = asyncHandler(async(req,res) => {
 })
 
 module.exports = {
-    getLobby,
+    getLobby: getLobbyById,
     createLobby,
     deleteLobby
 }

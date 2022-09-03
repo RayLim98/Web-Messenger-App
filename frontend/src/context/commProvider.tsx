@@ -3,6 +3,9 @@ import React, { createContext, SetStateAction, useContext, useEffect, useState }
 import { io, Socket } from "socket.io-client"
 import { useAuth } from './authProvider';
 import { useNavigate } from "react-router-dom"
+import LobbyI from '../interface/LobbyI';
+import MessageI from '../interface/MessageI';
+import createMessage from '../api/createMessage';
 
 const socket = io("http://localhost:3001")
 
@@ -15,28 +18,39 @@ const CommContext = createContext<ContextProps>({
     ping: () => {},
     lobbyList: [],
     isConnected: false,
-    currentLobby: "",
+    currentLobby: {} as LobbyI,
     socket: socket,
 });
 
-
+/**
+ * @description Socket and database state handler. Abstration of message logic for socket and api/database layer 
+ * @returns 
+ */
 const CommProvider = ({children}: CommProviderProps) => {
     const { user } = useAuth()
     const navigate = useNavigate()
     const [isConnected, setIsConnected] = useState<boolean>(false)
-    const [lobbyList, setLobbyList] = useState<any>(null)
-    const [currentLobby, setLobby] = useState<string>("")
+    const [lobbyList, setLobbyList] = useState<LobbyI[]>([])
+    const [currentLobby, setLobby] = useState<LobbyI>({} as LobbyI)
 
     const sendMessage = async (messageDoc: MessageI) => {
-      socket.emit("send_message", messageDoc)
+        try {
+            const res = await createMessage(messageDoc, user.token)
+            console.log("Sent message with response: ", res)
+            socket.emit("send_message", messageDoc)
+        } catch(e) {
+            console.log("failed to send message: ", e)
+        }
     }
 
-    const joinLobby = (lobbyId: string) => {
-        setLobby(lobbyId);
+    const joinLobby = (lobby: LobbyI) => {
+        leaveLobby()
+        setLobby(lobby);
         socket.emit("join_lobby", {
-            lobbyId: lobbyId,
+            lobbyId: lobby.id,
             user: user.userName
         })
+        navigate(`/home/${lobby.title}`)
     }
 
     const leaveLobby = () => {
@@ -95,25 +109,13 @@ interface CommProviderProps {
 
 interface ContextProps {
     sendMessage: (messageDoc: MessageI) => void,
-    joinLobby: (lobbyId: string) => void,
+    joinLobby: (lobby: LobbyI) => void,
     leaveLobby: () => void,
     createLobby: () => void,
     ping: () => void,
-    setLobby: (value: string) => void,
-    lobbyList: ObjectId[],
+    setLobby: (lobby: LobbyI) => void,
     isConnected: boolean,
-    currentLobby: string,
+    lobbyList: LobbyI[],
+    currentLobby: LobbyI,
     socket: Socket,
-}
-
-export interface MessageI {
-    lobbyId: string
-    message: string
-    author: string
-}
-
-export interface LobbyI {
-    name: string
-    author: string
-    image?: string
 }
