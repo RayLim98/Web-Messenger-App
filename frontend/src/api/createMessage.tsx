@@ -6,7 +6,7 @@ import MessageI from '../interface/MessageI';
  * @param token data user data if use if token is valid
  * @param payload message to be created
  */
-const createMessage = (payload: MessageI, token: string ) => {
+const createMessageApi = (payload: MessageI, token: string ) => {
     const message = payload;
     const config = {
         headers: { Authorization: `Bearer ${token}` }
@@ -19,4 +19,4 @@ const createMessage = (payload: MessageI, token: string ) => {
     )
 }
 
-export default createMessage
+export default createMessageApi

@@ -6,6 +6,7 @@ import registerUser from '../api/registerUser';
 import getMessageByLobbyId from '../api/getMessages';
 import { AxiosResponse } from 'axios';
 import { LocalSeeOutlined } from '@mui/icons-material';
+import LobbyI from '../interface/LobbyI';
 
 const AuthContext = createContext<any>({})
 
@@ -14,7 +15,7 @@ interface UserInterface {
     userName: string
     age: number
     token: string
-    lobbies: ObjectId[]
+    lobbies: LobbyI[]
 }
 
 const AuthProvider = ({children}:{children:React.ReactNode}) => {
@@ -24,7 +25,6 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
     useEffect(() => {
         // Check if user has previously logged in
         const loggedInUser = localStorage.getItem("user")
-        console.log(loggedInUser)
         if(loggedInUser) {
             const userJson = JSON.parse(loggedInUser)
             setUser(userJson);

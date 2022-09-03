@@ -1,6 +1,5 @@
 const Message = require('../models/messageModel');
 const asyncHandler = require('express-async-handler');
-const { ObjectId } = require('mongodb');
 
 /**
  * @description GET 

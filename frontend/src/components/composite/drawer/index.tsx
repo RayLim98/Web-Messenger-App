@@ -7,14 +7,13 @@ import {
     Divider, 
     ListItemText, 
 } from '@mui/material'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 // Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 // Hooks
 import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
-import { useNavigate } from 'react-router-dom';
 import UserBanner from '../banner/userBanner'
 import CreateLobbyModal from '../modals/createLobbyModal';
 //interfaces
@@ -44,7 +43,7 @@ interface Props {
 const MainDrawer = ({open, setOpen}: Props) => {
     const [modalOpen, setModalOpen] = useState(false)
     const {user, logout} = useAuth()
-    const { joinLobby } = useComm()
+    const { joinLobby, lobbyList } = useComm()
 
     const handleSelection = (selection: LobbyI) => {
         joinLobby(selection)
@@ -68,7 +67,11 @@ const MainDrawer = ({open, setOpen}: Props) => {
             />
             <List>
                 <ListItem>
-                    <ListItemText>
+                    <ListItemText 
+                        primaryTypographyProps={{
+                            color:"text.secondary"
+                        }}
+                    >
                         {user?.userName}
                     </ListItemText>
                 </ListItem>
@@ -78,10 +81,18 @@ const MainDrawer = ({open, setOpen}: Props) => {
                 <Divider/>
                 <ListItem>
                     <ListItemButton onClick={()=> setModalOpen(true)}>
-                        <ListItemText>
+                        <ListItemText
+                            primaryTypographyProps={{
+                                color:"text.secondary"
+                            }}
+                        >
                             Add Server
                         </ListItemText>
-                        <AddIcon/>
+                        <AddIcon 
+                            sx={{
+                                color:"text.secondary"
+                            }}
+                        />
                     </ListItemButton>
                 </ListItem>
                 <List 
@@ -90,12 +101,16 @@ const MainDrawer = ({open, setOpen}: Props) => {
                     }}
                 >
                     {
-                        lobbies.map((item, idx)=> ( 
+                        lobbyList.map((item, idx)=> ( 
                             <ListItem key={idx}>
                                 <ListItemButton onClick={()=> handleSelection(item)}>
-                                    <Typography>
+                                    <ListItemText
+                                        primaryTypographyProps={{
+                                            color:"text.secondary"
+                                        }}
+                                    >
                                         {item.title}
-                                    </Typography>
+                                    </ListItemText>
                                 </ListItemButton>
                             </ListItem>
                          ))
@@ -104,10 +119,18 @@ const MainDrawer = ({open, setOpen}: Props) => {
                 <Divider/>
                 <ListItem>
                     <ListItemButton onClick={()=> logout()}>
-                        <ListItemText>
+                        <ListItemText 
+                            primaryTypographyProps={{
+                                color:"text.secondary"
+                            }}
+                        >
                             Logout
                         </ListItemText>
-                        <LogoutIcon/>
+                        <LogoutIcon
+                            sx={{
+                                color:"text.secondary"
+                            }}
+                        />
                     </ListItemButton>
                 </ListItem>
             </List>

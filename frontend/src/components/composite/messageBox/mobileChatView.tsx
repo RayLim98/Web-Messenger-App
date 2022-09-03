@@ -6,12 +6,11 @@ import { useComm } from '../../../context/commProvider'
 import MessageI from '../../../interface/MessageI'
 import LobbyI from '../../../interface/LobbyI'
 
-interface MessageBoxProps {
-  lobby: LobbyI
+interface MobileChatViewProps {
   userName: string
   inputValue: string
-  setInputValue: (value: string) => void
   messageList: MessageI[]
+  setInputValue: (value: string) => void
   submitMessage: () => void
 }
 
@@ -20,11 +19,13 @@ interface MessageBoxProps {
  * Diplays messages and send messages
  */
 const MobileChatView = ({
-  submitMessage, 
-  messageList, 
+  userName,
   inputValue,
+  messageList, 
   setInputValue, 
-}: MessageBoxProps) => {
+  submitMessage, 
+}: MobileChatViewProps) => {
+  const { user } = useAuth()
   return (
     <Box sx={{
       height: "100%",
@@ -38,8 +39,12 @@ const MobileChatView = ({
         overflow={"scroll"}
       >
         {
-          messageList.map((item:any, idx: number)=> ( 
-            <Typography variant='h6' key={idx}>
+          messageList.map((item: MessageI, idx: number)=> ( 
+            <Typography variant='h6' key={idx} color={"text.primary"} 
+              sx={{
+                alignSelf: userName && userName === item.author? "flex-end": "flex-start",
+              }}
+            >
               {item.message}
             </Typography>
           ))
@@ -60,7 +65,7 @@ const MobileChatView = ({
           }}
         />
         <Button onClick={submitMessage}>
-            <Typography>
+            <Typography color={"text.secondary"}>
               Send
             </Typography>
         </Button>

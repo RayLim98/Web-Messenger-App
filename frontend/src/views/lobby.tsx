@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import MobileChatView from '../components/composite/messageBox/mobileChatView'
-import MobileHeader from '../components/composite/headers/mobileHeader';
 import { useAuth } from '../context/authProvider';
 import { useComm } from '../context/commProvider';
 import MessageI from '../interface/MessageI';
@@ -8,7 +7,7 @@ import getMessageByLobbyId from '../api/getMessages';
 
 const Lobby = () => {
   const { user } = useAuth();
-  const { socket, sendMessage, currentLobby} = useComm();
+  const { socket, sendMessage, currentLobby } = useComm();
 
   const [textValue, setMessage] = useState<string>("")
   const [messageList, setMessageList] = useState<MessageI[]>([])
@@ -22,25 +21,34 @@ const Lobby = () => {
     }
     // Send payload for socket and API handling
     sendMessage(payload)
-    setMessageList((list) => [payload, ...list])
+    setMessageList((list) => {
+      const updatedList = [payload, ...list]
+      localStorage.setItem(`${currentLobby.id}`, JSON.stringify(updatedList))
+      return updatedList
+    })
     setMessage("")
   }
 
-  useEffect(() => {
-    const loadMessages = async ()=> {
-      try {
-        const messages = await getMessageByLobbyId(currentLobby, user.token)
-        console.log(messages) 
-        setMessageList(messages.data)
-      } catch(e: any) {
-        throw new Error("Failed to get message", e)
-      }
+  const loadMessages = async ()=> {
+    const cachedMessages = localStorage.getItem(`${currentLobby.id}`);
+    if(cachedMessages) {
+      setMessageList(JSON.parse(cachedMessages));
     }
-    loadMessages()
-  }, [currentLobby])
+    try {
+      const messages = await getMessageByLobbyId(currentLobby, user.token)
+      console.log(messages) 
+      setMessageList(messages.data)
+    } catch(e: any) {
+      throw new Error("Failed to get message", e)
+    }
+  }
 
   useEffect(() => {
-    socket.on("receive_message", (messageDoc) => {
+    loadMessages()
+  }, [user, currentLobby])
+
+  useEffect(() => {
+    socket.on("receive_message", (messageDoc: MessageI) => {
       setMessageList((list) => [messageDoc,...list])
     })
 
@@ -48,13 +56,13 @@ const Lobby = () => {
       socket.off("receive_message")
     }
   }, [socket])
+
   return (
       <MobileChatView 
-          lobby={currentLobby}
           userName={user?.userName}
           messageList={messageList}
-          submitMessage={submitMessage}
           inputValue={textValue}
+          submitMessage={submitMessage}
           setInputValue={setMessage}
       /> 
   )

@@ -1,19 +1,24 @@
-import { ObjectId } from 'mongodb';
-import React, { createContext, SetStateAction, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { io, Socket } from "socket.io-client"
 import { useAuth } from './authProvider';
 import { useNavigate } from "react-router-dom"
+
 import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
-import createMessage from '../api/createMessage';
+import createMessageApi from '../api/createMessage';
+import createLobbyApi from '../api/lobbyAPI/createlobby';
+import updateUser from '../api/updateUser';
+import { ObjectId, ObjectID } from 'bson';
+import asyncGetLobby from '../api/lobbyAPI/getlobby';
+import getLobbyById from '../api/lobbyAPI/getlobby';
 
 const socket = io("http://localhost:3001")
 
 const CommContext = createContext<ContextProps>({
     sendMessage: () => {},
     joinLobby: () => {},
-    leaveLobby: () => {},
     createLobby: () => {},
+    setLobbyList: ()=> {},
     setLobby: () => {},
     ping: () => {},
     lobbyList: [],
@@ -21,6 +26,7 @@ const CommContext = createContext<ContextProps>({
     currentLobby: {} as LobbyI,
     socket: socket,
 });
+
 
 /**
  * @description Socket and database state handler. Abstration of message logic for socket and api/database layer 
@@ -30,12 +36,12 @@ const CommProvider = ({children}: CommProviderProps) => {
     const { user } = useAuth()
     const navigate = useNavigate()
     const [isConnected, setIsConnected] = useState<boolean>(false)
-    const [lobbyList, setLobbyList] = useState<LobbyI[]>([])
+    const [lobbyList, setLobbyList] = useState<LobbyI[]>(lobbies)
     const [currentLobby, setLobby] = useState<LobbyI>({} as LobbyI)
 
     const sendMessage = async (messageDoc: MessageI) => {
         try {
-            const res = await createMessage(messageDoc, user.token)
+            const res = await createMessageApi(messageDoc, user.token)
             console.log("Sent message with response: ", res)
             socket.emit("send_message", messageDoc)
         } catch(e) {
@@ -43,7 +49,21 @@ const CommProvider = ({children}: CommProviderProps) => {
         }
     }
 
-    const joinLobby = (lobby: LobbyI) => {
+    const loadLobbies = async () => {
+        const lobbyIds = user?.lobbies
+        if(lobbyIds) {
+            const lobbyData = await Promise.all(
+                lobbyIds.map(async(lobbyId: ObjectId)=> {
+                    const response = await getLobbyById(lobbyId, user.token)
+                    return response.data.data
+                })
+            )
+
+            setLobbyList(lobbies.concat(lobbyData))
+        }
+    }
+
+    const joinLobby = async (lobby: LobbyI) => {
         leaveLobby()
         setLobby(lobby);
         socket.emit("join_lobby", {
@@ -53,36 +73,42 @@ const CommProvider = ({children}: CommProviderProps) => {
         navigate(`/home/${lobby.title}`)
     }
 
-    const leaveLobby = () => {
+    const leaveLobby = async () => {
         socket.emit("leave_lobby", {
-            lobbyId: currentLobby,
+            lobbyId: currentLobby.id,
             user: user.userName
         })
     }
 
-    const createLobby = () => { }
+    const createLobby = async (newLobby: LobbyI) => { 
+        try{
+            const res = await createLobbyApi(newLobby, user.token)
+            const prevDoc = await updateUser({ 
+                lobbyId: res.data._id 
+            }, user.token)
+            console.log("Updated user document: ", prevDoc)
+        } catch(e) {
+            console.log("Failed to create lobby", e)
+        }
+    }
 
     const ping = () => {
         socket.emit("ping")
     }
 
-    useEffect(()=> {
-        if(user) {
-            const lobbyList = user.lobbies;
-            console.log("User loaded in with lobbies ", lobbyList)
-            setLobbyList(lobbyList)
-        }
-    },[user, lobbyList])
-
+    useEffect(() => {
+        loadLobbies()
+    }, [user])
+    
     return (
         <CommContext.Provider 
             value = {{
                sendMessage, 
                joinLobby,
-               leaveLobby,
                createLobby,
                setLobby,
                ping,
+               setLobbyList,
                lobbyList,
                isConnected,
                currentLobby,
@@ -110,12 +136,22 @@ interface CommProviderProps {
 interface ContextProps {
     sendMessage: (messageDoc: MessageI) => void,
     joinLobby: (lobby: LobbyI) => void,
-    leaveLobby: () => void,
-    createLobby: () => void,
+    createLobby: (lobby: LobbyI) => void,
     ping: () => void,
-    setLobby: (lobby: LobbyI) => void,
+    setLobby: React.Dispatch<React.SetStateAction<LobbyI>>,
+    setLobbyList: React.Dispatch<React.SetStateAction<LobbyI[]>>,
     isConnected: boolean,
     lobbyList: LobbyI[],
     currentLobby: LobbyI,
     socket: Socket,
 }
+
+
+const lobbies: LobbyI[]= [
+  {
+    id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
+    title: "MyChat",
+    author: "raymodnlim",
+    image: ""
+  },
+]

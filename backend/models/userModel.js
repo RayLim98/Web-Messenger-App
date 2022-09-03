@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const { lobbySchema } = require("./lobbyModel")
 const userSchema = mongoose.Schema({
     userName: {
         type: String,

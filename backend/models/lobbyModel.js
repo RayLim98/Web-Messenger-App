@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const lobbySchema = mongoose.Schema({
-    name: {
+    id: {
+        type: String,
+    },
+    title: {
         type: String,
         required: [true, 'Please add name field']
     },
@@ -18,5 +21,9 @@ const lobbySchema = mongoose.Schema({
     }
 )
 
+const Lobby = mongoose.model('Lobby', lobbySchema) 
 
-module.exports = mongoose.model('Lobby', lobbySchema)
+module.exports = {
+    lobbySchema,
+    Lobby
+} 

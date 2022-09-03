@@ -1,8 +1,11 @@
 import { Stack ,Button,Dialog, TextField, Typography } from '@mui/material'
+import { ObjectID } from 'bson'
 import React, {useState} from 'react'
-import createLobby from '../../../api/lobbyAPI/createlobby'
+import createLobbyApi from '../../../api/lobbyAPI/createlobby'
 import updateUser from '../../../api/updateUser'
 import { useAuth } from '../../../context/authProvider'
+import { useComm } from '../../../context/commProvider'
+import LobbyI from '../../../interface/LobbyI'
 
 interface Props {
     open: boolean
@@ -12,6 +15,8 @@ interface Props {
 const CreateLobbyModal = ({open, onClose}: Props) => {
     const [name, setName] = useState("")
     const {user} = useAuth()
+    const { setLobbyList, createLobby } = useComm()
+
     const handleClose = () => {
         onClose(false)
     }
@@ -19,14 +24,15 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
     const handleSubmit = async () => {
         if(name !== "") {
             try {
-                // Create lobby
-                const res = await createLobby({ name: name, }, user.token).then()
+                const newLobby: LobbyI = {
+                    id: new ObjectID().toString(),
+                    title: name,
+                    author: user.userName,
+                } 
 
-                // use Response with new lobby data and update it to user data
-                const prevDoc = await updateUser({ 
-                    lobbyId: res.data._id 
-                }, user.token)
-                console.log("Updated document: ", prevDoc)
+                // Create and update lobby in datebase and local 
+                createLobby(newLobby)
+                setLobbyList((prev) => [...prev, newLobby])
 
                 // Close on finish
                 handleClose()
@@ -44,8 +50,8 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
             onClose={handleClose}
         >
             <Stack sx={{padding: "1rem", pr: "2rem", pl: "2rem"}}>
-                <Typography variant='h6' sx={{mb: "0.5rem"}}>
-                    Creater a new server
+                <Typography variant='h6' sx={{mb: "0.5rem"}} color={"text.secondary"}>
+                    Create a new lobby
                 </Typography>
                 <TextField
                     value={name}

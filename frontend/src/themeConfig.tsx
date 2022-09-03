@@ -34,7 +34,7 @@ export const light: PaletteOptions = {
   },
   text: {
     primary: '#000000',
-    secondary: '#A30052',
+    secondary: '#ffffff',
   } 
 }
 

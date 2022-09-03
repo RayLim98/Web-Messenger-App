@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { ObjectId } from 'bson';
 
-const asyncGetLobby = async (token:string) => {
+const getLobbyById = (lobbyId: ObjectId,token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
-    return await axios.get('/api/lobby', config)
+    return axios.get(`/api/lobby/${lobbyId.toString()}`, config)
 }
 
-export default asyncGetLobby
+export default getLobbyById
