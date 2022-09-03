@@ -9,7 +9,7 @@ interface Props {
  * @description logins user with credientials 
  * @returns 
  */
-const loginUser = (payload: Props) => {
+const loginUserApi = (payload: Props) => {
     const { userName, password } = payload;
     return axios.post('/api/user/login',{
         userName,
@@ -17,5 +17,5 @@ const loginUser = (payload: Props) => {
     })
 }
 
-export default loginUser
+export default loginUserApi
 

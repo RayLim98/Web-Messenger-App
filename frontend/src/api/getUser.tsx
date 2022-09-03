@@ -4,7 +4,7 @@ import axios from 'axios';
  * @param {string} token JWT token for authentication
  * @description Gets data user data if use if token is valid
  */
-const getData = (token: string) => {
+const getUserDataApi = (token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
@@ -14,4 +14,4 @@ const getData = (token: string) => {
     )
 }
 
-export default getData
+export default getUserDataApi

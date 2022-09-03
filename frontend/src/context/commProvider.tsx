@@ -7,10 +7,10 @@ import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 import createMessageApi from '../api/createMessage';
 import createLobbyApi from '../api/lobbyAPI/createlobby';
-import updateUser from '../api/updateUser';
+import updateUserApi from '../api/updateUser';
 import { ObjectId, ObjectID } from 'bson';
 import asyncGetLobby from '../api/lobbyAPI/getlobby';
-import getLobbyById from '../api/lobbyAPI/getlobby';
+import getLobbyByIdApi from '../api/lobbyAPI/getlobby';
 
 const socket = io("http://localhost:3001")
 
@@ -54,7 +54,7 @@ const CommProvider = ({children}: CommProviderProps) => {
         if(lobbyIds) {
             const lobbyData = await Promise.all(
                 lobbyIds.map(async(lobbyId: ObjectId)=> {
-                    const response = await getLobbyById(lobbyId, user.token)
+                    const response = await getLobbyByIdApi(lobbyId, user.token)
                     return response.data.data
                 })
             )
@@ -83,7 +83,7 @@ const CommProvider = ({children}: CommProviderProps) => {
     const createLobby = async (newLobby: LobbyI) => { 
         try{
             const res = await createLobbyApi(newLobby, user.token)
-            const prevDoc = await updateUser({ 
+            const prevDoc = await updateUserApi({ 
                 lobbyId: res.data._id 
             }, user.token)
             console.log("Updated user document: ", prevDoc)

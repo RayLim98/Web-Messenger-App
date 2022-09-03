@@ -10,7 +10,7 @@ interface Props {
  * @description creates new user document 
  * @returns 
  */
-const registerUser = (payload: Props) => {
+const registerUserApi = (payload: Props) => {
     const { userName, password, age } = payload;
     return axios.post('/api/user/register',{
         userName,
@@ -19,4 +19,4 @@ const registerUser = (payload: Props) => {
     })
 }
 
-export default registerUser
+export default registerUserApi

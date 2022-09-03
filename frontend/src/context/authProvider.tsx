@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect, useContext} from 'react'
 import { ObjectId } from 'mongodb';
-import getData from '../api/getUser';
-import loginUser from '../api/loginUser';
-import registerUser from '../api/registerUser';
+import getUserDataApi from '../api/getUser';
+import loginUserApi from '../api/loginUser';
+import registerUserApi from '../api/registerUser';
 import getMessageByLobbyId from '../api/getMessages';
 import { AxiosResponse } from 'axios';
 import { LocalSeeOutlined } from '@mui/icons-material';
@@ -34,7 +34,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
     const login = async (payload:any) => {
         try {
             // Save user 
-            const {data} = await loginUser(payload);
+            const {data} = await loginUserApi(payload);
             setUser(data);
 
             // Store data as a string to avoid VAUGE object output
@@ -45,7 +45,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
         }
     }
 
-    const register = (data:any) => registerUser(data)
+    const register = (data:any) => registerUserApi(data)
         .then(res => {
             console.log("Sucess", res.data);
         })
@@ -65,7 +65,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
     const getUserData = async () => {
         if(user)
             try {
-                const res = await getData(user.token)
+                const res = await getUserDataApi(user.token)
                 console.log("Getting user data: ", res)
                 return res.data
             } catch(err) {

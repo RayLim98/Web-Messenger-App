@@ -7,7 +7,7 @@ interface Props {
     lobbyId?: ObjectId
 }
 
-const updateUser = ({lobbyId}: Props, token:string) => {
+const updateUserApi = ({lobbyId}: Props, token:string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
@@ -16,4 +16,4 @@ const updateUser = ({lobbyId}: Props, token:string) => {
      }, config)
 }
 
-export default updateUser
+export default updateUserApi
