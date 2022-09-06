@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import MainDrawer from '../drawer';
+import MobileDrawer from '../drawer';
 import {AppBar, IconButton, Box, Stack, Typography, useTheme, Toolbar} from "@mui/material"
 // Hooks
 import { useMode } from '../../../App';
@@ -42,7 +42,7 @@ const MobileHeader = ({lobbyTitle}: Props) => {
                         </IconButton>
                     </Toolbar>
             </AppBar>
-            <MainDrawer open={drawer} setOpen={setDrawer}/>
+            <MobileDrawer open={drawer} setOpen={setDrawer}/>
         </>
     )
 }

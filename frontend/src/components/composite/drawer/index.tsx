@@ -40,7 +40,7 @@ interface Props {
     setOpen: (value:boolean) => void
 }
 
-const MainDrawer = ({open, setOpen}: Props) => {
+const MobileDrawer = ({open, setOpen}: Props) => {
     const [modalOpen, setModalOpen] = useState(false)
     const {user, logout} = useAuth()
     const { joinLobby, lobbyList } = useComm()
@@ -138,4 +138,4 @@ const MainDrawer = ({open, setOpen}: Props) => {
     )
 }
 
-export default MainDrawer
+export default MobileDrawer

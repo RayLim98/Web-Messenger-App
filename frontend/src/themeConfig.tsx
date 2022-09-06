@@ -15,7 +15,10 @@ declare module '@mui/material/styles' {
         };
     }
     interface PaletteOptions {
-        custom?: {
+        inputField?: {
+            main?: string
+        },
+        clickableText?: {
             main?: string
         }
     }
@@ -35,7 +38,13 @@ export const light: PaletteOptions = {
   text: {
     primary: '#000000',
     secondary: '#ffffff',
-  } 
+  },
+  inputField: {
+    main: '#c9d9ea',
+  },
+  clickableText: {
+    main: '#1565c0',
+  }
 }
 
 export const dark: PaletteOptions = {
@@ -46,11 +55,17 @@ export const dark: PaletteOptions = {
     main: '#db3d8d',
   },
   background: {
-    default: '#212121',
+    default: '#131313',
     paper: '#1565c0'
   },
   text: {
     primary: '#ffffff',
     secondary: '#db3d8d'
-  } 
+  },
+  inputField: {
+    main: '#2c2c2c',
+  },
+  clickableText: {
+    main: "#db3d8d"
+  }
 }

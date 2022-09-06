@@ -18,6 +18,7 @@ const PhotoWrapper = ({size, onClick, children}: Props) => {
         width: `${ size || 10 }rem`,
         cursor: 'pointer',
         backgroundColor: 'primary.main',
+        justifyContent: "center",
       }}
       onClick={onClick}
     >

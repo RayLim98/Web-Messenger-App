@@ -1,6 +1,6 @@
 import PageWrapper from '../components/core/wrapper/pageWrapper'
 
-const Details = () => {
+const Settings = () => {
   return (
     <PageWrapper>
       Details page
@@ -8,4 +8,4 @@ const Details = () => {
   )
 }
 
-export default Details
+export default Settings

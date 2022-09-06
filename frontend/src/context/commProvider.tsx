@@ -70,7 +70,6 @@ const CommProvider = ({children}: CommProviderProps) => {
             lobbyId: lobby.id,
             user: user.userName
         })
-        navigate(`/home/${lobby.title}`)
     }
 
     const leaveLobby = async () => {
