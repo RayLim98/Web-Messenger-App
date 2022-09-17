@@ -37,7 +37,7 @@ export const light: PaletteOptions = {
   },
   text: {
     primary: '#000000',
-    secondary: '#ffffff',
+    secondary: '#1565c0',
   },
   inputField: {
     main: '#c9d9ea',

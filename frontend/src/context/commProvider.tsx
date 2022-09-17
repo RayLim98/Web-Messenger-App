@@ -10,6 +10,7 @@ import createLobbyApi_ from '../api/lobbyAPI/createlobby';
 import updateUserApi from '../api/updateUser';
 import { ObjectId, ObjectID } from 'bson';
 import getLobbyByIdApi from '../api/lobbyAPI/getlobby';
+import deleteLobbyApi_ from '../api/lobbyAPI/deleteLobby';
 
 const socket = io("http://localhost:3001")
 
@@ -17,6 +18,7 @@ const CommContext = createContext<ContextProps>({
     sendMessage: () => {},
     joinLobby: () => {},
     createLobby: () => {},
+    deleteLobby: () => {},
     setLobbyList: ()=> {},
     setLobby: () => {},
     ping: () => {},
@@ -58,7 +60,7 @@ const CommProvider = ({children}: CommProviderProps) => {
                     return response.data.data
                 })
             )
-
+            console.log('Fetched Lobbies: ', lobbyData)
             setLobbyList(lobbies.concat(lobbyData))
         }
     }
@@ -105,6 +107,14 @@ const CommProvider = ({children}: CommProviderProps) => {
         }
     }
 
+    const deleteLobby = async (deleteLobby: LobbyI) => {
+        try {
+            const res = await deleteLobbyApi_(deleteLobby, user.token)
+        } catch (e) {
+
+        }
+    }
+
     const ping = () => {
         socket.emit("ping")
     }
@@ -122,6 +132,7 @@ const CommProvider = ({children}: CommProviderProps) => {
                sendMessage, 
                joinLobby,
                createLobby,
+               deleteLobby,
                setLobby,
                ping,
                setLobbyList,
@@ -153,6 +164,7 @@ interface ContextProps {
     sendMessage: (messageDoc: MessageI) => void,
     joinLobby: (lobby: LobbyI) => void,
     createLobby: (lobby: LobbyI) => void,
+    deleteLobby: (lobby: LobbyI) => void,
     ping: () => void,
     setLobby: React.Dispatch<React.SetStateAction<LobbyI>>,
     setLobbyList: React.Dispatch<React.SetStateAction<LobbyI[]>>,

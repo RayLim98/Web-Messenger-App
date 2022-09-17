@@ -1,8 +1,5 @@
+import { useState } from 'react'
 import { Stack ,Button,Dialog, TextField, Typography } from '@mui/material'
-import { ObjectID } from 'bson'
-import React, {useState} from 'react'
-import createLobbyApi_ from '../../../api/lobbyAPI/createlobby'
-import updateUserApi from '../../../api/updateUser'
 import { useAuth } from '../../../context/authProvider'
 import { useComm } from '../../../context/commProvider'
 import LobbyI from '../../../interface/LobbyI'
@@ -10,37 +7,21 @@ import LobbyI from '../../../interface/LobbyI'
 interface Props {
     open: boolean
     onClose: (val: boolean)=> void
+    selection: LobbyI
 }
 
-const CreateLobbyModal = ({open, onClose}: Props) => {
+const DeleteLobbyModal = ({open, onClose, selection}: Props) => {
     const [name, setName] = useState("")
     const {user} = useAuth()
-    const { createLobby } = useComm()
+    const { deleteLobby } = useComm()
 
     const handleClose = () => {
         onClose(false)
     }
 
     const handleSubmit = async () => {
-        if(name !== "") {
-            try {
-                const newLobby: LobbyI = {
-                    id: new ObjectID().toString(),
-                    title: name,
-                    author: user.userName,
-                } 
-
-                // Create and update lobby in datebase and local 
-                createLobby(newLobby)
-
-                // Close on finish
-                handleClose()
-            } catch(e){
-                console.log("failed to create lobby", e)
-            }
-        } else {
-                console.log("Field is empty.")
-        }
+        deleteLobby(selection)
+        onClose(false)
     }
 
     return (
@@ -55,15 +36,19 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
         >
             <Stack sx={{padding: "1rem", pr: "2rem", pl: "2rem"}}>
                 <Typography variant='h6' sx={{mb: "0.5rem"}} color={"text.secondary"}>
-                    Create a new lobby
+                    Delete Lobby
                 </Typography>
-                <TextField
-                    value={name}
-                    onChange={(e)=> setName(e.target.value)}
-                />
+                <Typography variant='h6' sx={{mb: "0.5rem"}} color={"text.secondary"}>
+                    {selection.title}
+                </Typography>
                 <Button onClick={handleSubmit}>
                     <Typography variant='h6' color={"text.primary"}>
-                        Create
+                        Yes
+                    </Typography>
+                </Button>
+                <Button onClick={handleClose}>
+                    <Typography variant='h6' color={"text.primary"}>
+                        No
                     </Typography>
                 </Button>
             </Stack>
@@ -71,4 +56,4 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
     )
 }
 
-export default CreateLobbyModal
+export default DeleteLobbyModal

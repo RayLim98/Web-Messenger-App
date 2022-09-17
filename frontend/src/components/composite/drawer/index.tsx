@@ -14,8 +14,11 @@ import AddIcon from '@mui/icons-material/Add';
 // Hooks
 import { useComm } from '../../../context/commProvider';
 import { useAuth } from '../../../context/authProvider';
+// Components
 import UserBanner from '../banner/userBanner'
 import CreateLobbyModal from '../modals/createLobbyModal';
+import MuiListItem from '../../core/listItem-mui/listItem';
+import DeleteLobbyModal from '../../composite/modals/deleteLobbyModal';
 //interfaces
 import LobbyI from '../../../interface/LobbyI';
 import { ObjectID } from 'bson';
@@ -41,13 +44,21 @@ interface Props {
 }
 
 const MobileDrawer = ({open, setOpen}: Props) => {
-    const [modalOpen, setModalOpen] = useState(false)
     const {user, logout} = useAuth()
     const { joinLobby, lobbyList } = useComm()
+    const [createModal, setCreateModal] = useState(false)
+    const [deleteModal, setDeleteModel] = useState(false)
+    const [selection, setSelection] = useState<LobbyI>(lobbyList[0]);
+
 
     const handleSelection = (selection: LobbyI) => {
         joinLobby(selection)
         setOpen(false)
+    }
+
+    const handleDelete = (selection: LobbyI) => {
+        setSelection(selection)
+        setDeleteModel(true)
     }
 
     return (
@@ -57,15 +68,20 @@ const MobileDrawer = ({open, setOpen}: Props) => {
             onClose={()=> setOpen(false)}
             sx={{
                 "& .MuiPaper-root": {
-                    backgroundColor: "primary.main"
+                    backgroundColor: "background.default"
                 }
             }}
         >
             <CreateLobbyModal 
-                open={modalOpen}
-                onClose={setModalOpen} 
+                open={createModal}
+                onClose={setCreateModal} 
             />
-            <List>
+            <DeleteLobbyModal
+                open={deleteModal}
+                onClose={setDeleteModel} 
+                selection={selection}
+            />
+            <List disablePadding>
                 <ListItem>
                     <ListItemText 
                         primaryTypographyProps={{
@@ -80,39 +96,24 @@ const MobileDrawer = ({open, setOpen}: Props) => {
                 </ListItem>
                 <Divider/>
                 <ListItem>
-                    <ListItemButton onClick={()=> setModalOpen(true)}>
-                        <ListItemText
-                            primaryTypographyProps={{
-                                color:"text.secondary"
-                            }}
-                        >
+                    <ListItemButton onClick={()=> setCreateModal(true)}>
+                        <ListItemText sx={{color: 'text.secondary'}}>
                             Add Server
                         </ListItemText>
-                        <AddIcon 
-                            sx={{
-                                color:"text.secondary"
-                            }}
-                        />
+                        <AddIcon sx={{ color:"text.secondary" }}/>
                     </ListItemButton>
                 </ListItem>
-                <List 
-                    sx={{
-                        overflow: "scroll"
-                    }}
-                >
+                <Divider/>
+                <List sx={{ overflow: "scroll" }}>
                     {
                         lobbyList.map((item, idx)=> ( 
-                            <ListItem key={idx}>
-                                <ListItemButton onClick={()=> handleSelection(item)}>
-                                    <ListItemText
-                                        primaryTypographyProps={{
-                                            color:"text.secondary"
-                                        }}
-                                    >
-                                        {item.title}
-                                    </ListItemText>
-                                </ListItemButton>
-                            </ListItem>
+                            <MuiListItem 
+                                key={idx}
+                                onSelect={()=> handleSelection(item)}
+                                onDelete={()=> handleDelete(item)}
+                            >
+                                {item.title}
+                            </MuiListItem>
                          ))
                     }
                 </List>
