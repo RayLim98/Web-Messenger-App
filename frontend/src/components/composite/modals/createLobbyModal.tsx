@@ -2,7 +2,7 @@ import { Stack ,Button,Dialog, TextField, Typography } from '@mui/material'
 import { ObjectID } from 'bson'
 import React, {useState} from 'react'
 import createLobbyApi_ from '../../../api/lobbyAPI/createlobby'
-import updateUserApi from '../../../api/updateUser'
+import updateUserApi_ from '../../../api/updateUser'
 import { useAuth } from '../../../context/authProvider'
 import { useComm } from '../../../context/commProvider'
 import LobbyI from '../../../interface/LobbyI'
@@ -25,7 +25,7 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
         if(name !== "") {
             try {
                 const newLobby: LobbyI = {
-                    id: new ObjectID().toString(),
+                    _id: new ObjectID(),
                     title: name,
                     author: user.userName,
                 } 

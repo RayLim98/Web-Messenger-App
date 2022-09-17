@@ -23,20 +23,20 @@ import DeleteLobbyModal from '../../composite/modals/deleteLobbyModal';
 import LobbyI from '../../../interface/LobbyI';
 import { ObjectID } from 'bson';
 
-const lobbies: LobbyI[]= [
-  {
-    id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
-    title: "MyLobby",
-    author: "raymodnlim",
-    image: ""
-  },
-  {
-    id: new ObjectID("6312ce58c6a43a065e6d0776").toString(),
-    title: "Public",
-    author: "raymondlim",
-    image: ""
-  }
-]
+// const lobbies: LobbyI[]= [
+//   {
+//     id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
+//     title: "MyLobby",
+//     author: "raymodnlim",
+//     image: ""
+//   },
+//   {
+//     id: new ObjectID("6312ce58c6a43a065e6d0776").toString(),
+//     title: "Public",
+//     author: "raymondlim",
+//     image: ""
+//   }
+// ]
 
 interface Props {
     open: boolean

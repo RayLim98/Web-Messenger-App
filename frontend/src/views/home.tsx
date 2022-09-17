@@ -39,7 +39,7 @@ const Home = () => {
 
   const submitMessage = () => {
     const payload: MessageI = {
-      lobbyId: currentLobby.id.toString(), 
+      lobbyId: currentLobby._id.toString(), 
       message: textValue,
       author: user.userName,
       createdAt: new Date(Date.now())
@@ -48,20 +48,19 @@ const Home = () => {
     sendMessage(payload)
     setMessageList((list) => {
       const updatedList = [payload, ...list]
-      localStorage.setItem(`${currentLobby.id}`, JSON.stringify(updatedList))
+      localStorage.setItem(`${currentLobby._id}`, JSON.stringify(updatedList))
       return updatedList
     })
     setMessage("")
   }
 
   const loadMessages = async ()=> {
-    const cachedMessages = localStorage.getItem(`${currentLobby.id}`);
+    const cachedMessages = localStorage.getItem(`${currentLobby._id}`);
     if(cachedMessages) {
       setMessageList(JSON.parse(cachedMessages));
     }
     try {
       const messages = await getMessageByLobbyId(currentLobby, user.token)
-      console.log(messages) 
       setMessageList(messages.data)
     } catch(e: any) {
       throw new Error("Failed to get message", e)

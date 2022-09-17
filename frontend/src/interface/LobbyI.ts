@@ -1,5 +1,7 @@
+import { ObjectId } from "bson"
+
 interface LobbyI {
-    id: string
+    _id: ObjectId
     title: string
     author: string
     image?: string

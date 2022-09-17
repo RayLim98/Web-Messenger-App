@@ -11,7 +11,7 @@ const getMessageByLobbyId = async (currentLobby: LobbyI, token: string) => {
     }
 
     return axios.get(
-        `/api/test/${currentLobby.id}`, 
+        `/api/test/${currentLobby._id}`, 
         config, 
     )
 }

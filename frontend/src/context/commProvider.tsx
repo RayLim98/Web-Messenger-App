@@ -7,7 +7,7 @@ import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 import createMessageApi from '../api/createMessage';
 import createLobbyApi_ from '../api/lobbyAPI/createlobby';
-import updateUserApi from '../api/updateUser';
+import updateUserApi_ from '../api/updateUser';
 import { ObjectId, ObjectID } from 'bson';
 import getLobbyByIdApi from '../api/lobbyAPI/getlobby';
 import deleteLobbyApi_ from '../api/lobbyAPI/deleteLobby';
@@ -53,30 +53,41 @@ const CommProvider = ({children}: CommProviderProps) => {
     const loadLobbies = async () => {
         const lobbyIds = user.lobbies
         console.log("Load Lobbies", lobbyIds)
-        if(lobbyIds) {
-            const lobbyData = await Promise.all(
-                lobbyIds.map(async(lobbyId: ObjectId)=> {
+
+        // Grab all lobbies with current users list
+        const lobbyData = await Promise.all(
+            lobbyIds.map(async(lobbyId: ObjectId)=> {
+                try {
                     const response = await getLobbyByIdApi(lobbyId, user.token)
-                    return response.data.data
-                })
-            )
-            console.log('Fetched Lobbies: ', lobbyData)
-            setLobbyList(lobbies.concat(lobbyData))
-        }
+                    return response
+                } catch(e: any) {
+                    return e.response
+                }
+            })
+        )
+
+        // Filter the successful responses and get the data
+        const newLobbiesList = lobbyData
+        .filter((res)=> res.status === 200)
+        .map((res)=> res.data.data)
+
+        // Set Lobbies
+        console.trace('Fetched Lobbies', newLobbiesList)
+        setLobbyList(lobbies.concat(newLobbiesList))
     }
 
     const joinLobby = async (lobby: LobbyI) => {
         leaveLobby()
         setLobby(lobby);
         socket.emit("join_lobby", {
-            lobbyId: lobby.id,
+            lobbyId: lobby._id,
             user: user.userName
         })
     }
 
     const leaveLobby = async () => {
         socket.emit("leave_lobby", {
-            lobbyId: currentLobby.id,
+            lobbyId: currentLobby._id,
             user: user.userName
         })
     }
@@ -96,7 +107,7 @@ const CommProvider = ({children}: CommProviderProps) => {
                 localStorage.setItem("user", JSON.stringify(updateUser))
 
                 // Update user details in the database
-                const prevDoc = await updateUserApi({ 
+                const prevDoc = await updateUserApi_({ 
                     lobbies: newLobbyObjectIds 
                 }, user.token)
 
@@ -110,8 +121,12 @@ const CommProvider = ({children}: CommProviderProps) => {
     const deleteLobby = async (deleteLobby: LobbyI) => {
         try {
             const res = await deleteLobbyApi_(deleteLobby, user.token)
+            if(res) {
+                
+                console.log('Lobby has been deleted', res)
+            }
         } catch (e) {
-
+                console.log('Failed to delete lobby', e)
         }
     }
 
@@ -177,7 +192,7 @@ interface ContextProps {
 
 const lobbies: LobbyI[]= [
   {
-    id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
+    _id: new ObjectID("6312cee1322f306b8f1d1720"),
     title: "MyChat",
     author: "raymodnlim",
     image: ""

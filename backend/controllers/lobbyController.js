@@ -8,15 +8,17 @@ const getLobbyById = asyncHandler(async(req,res) => {
     const { id } = req.params
     const lobbyDoc = await Lobby.findById(id);
 
-    if(lobbyDoc) {
+    console.log(lobbyDoc)
+    if(!lobbyDoc) {
+        res.status(404).json({
+            message: `Lobby ${id} not found`,
+            data: id
+        })
+        throw new Error('Failed to find Lobby')
+    } else {
         res.status(200).json({
             message: "Lobby found",
             data: lobbyDoc
-        })
-    } else {
-        res.status(400).json({
-            message: "Couldn't find lobby",
-            data: null
         })
     }
 })
@@ -38,7 +40,7 @@ const createLobby = asyncHandler(async(req,res) => {
         console.log("New lobby created: ", newLobby._id)
         res.status(200).json(newLobby)
     } else {
-        res.status(400).json({
+        res.status(400).send({
             message: "Failed to create lobby",
         })
     }
