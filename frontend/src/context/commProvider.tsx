@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom"
 import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 import createMessageApi from '../api/createMessage';
-import createLobbyApi from '../api/lobbyAPI/createlobby';
+import createLobbyApi_ from '../api/lobbyAPI/createlobby';
 import updateUserApi from '../api/updateUser';
 import { ObjectId, ObjectID } from 'bson';
-import asyncGetLobby from '../api/lobbyAPI/getlobby';
 import getLobbyByIdApi from '../api/lobbyAPI/getlobby';
 
 const socket = io("http://localhost:3001")
@@ -33,7 +32,7 @@ const CommContext = createContext<ContextProps>({
  * @returns 
  */
 const CommProvider = ({children}: CommProviderProps) => {
-    const { user } = useAuth()
+    const { user, setUser } = useAuth()
     const navigate = useNavigate()
     const [isConnected, setIsConnected] = useState<boolean>(false)
     const [lobbyList, setLobbyList] = useState<LobbyI[]>(lobbies)
@@ -41,7 +40,7 @@ const CommProvider = ({children}: CommProviderProps) => {
 
     const sendMessage = async (messageDoc: MessageI) => {
         try {
-            const res = await createMessageApi(messageDoc, user.token)
+            const res = await createMessageApi(messageDoc, user!.token)
             console.log("Sent message with response: ", res)
             socket.emit("send_message", messageDoc)
         } catch(e) {
@@ -50,7 +49,8 @@ const CommProvider = ({children}: CommProviderProps) => {
     }
 
     const loadLobbies = async () => {
-        const lobbyIds = user?.lobbies
+        const lobbyIds = user.lobbies
+        console.log("Load Lobbies", lobbyIds)
         if(lobbyIds) {
             const lobbyData = await Promise.all(
                 lobbyIds.map(async(lobbyId: ObjectId)=> {
@@ -80,12 +80,26 @@ const CommProvider = ({children}: CommProviderProps) => {
     }
 
     const createLobby = async (newLobby: LobbyI) => { 
-        try{
-            const res = await createLobbyApi(newLobby, user.token)
-            const prevDoc = await updateUserApi({ 
-                lobbyId: res.data._id 
-            }, user.token)
+        try {
+            const res = await createLobbyApi_(newLobby, user.token)
+            if(res) {
+                // New Lobby list 
+                const newLobbyObjectIds = [...user.lobbies, res.data._id]
+                // Update user lobbies field
+                const updateUser = {...user, lobbies: newLobbyObjectIds}
+
+                // Set updated user details on client and cache it
+                // Store data as a string to avoid VAUGE object output
+                setUser(updateUser)
+                localStorage.setItem("user", JSON.stringify(updateUser))
+
+                // Update user details in the database
+                const prevDoc = await updateUserApi({ 
+                    lobbies: newLobbyObjectIds 
+                }, user.token)
+
             console.log("Updated user document: ", prevDoc)
+            }
         } catch(e) {
             console.log("Failed to create lobby", e)
         }
@@ -95,9 +109,12 @@ const CommProvider = ({children}: CommProviderProps) => {
         socket.emit("ping")
     }
 
+    /**
+     * Reload when user adds a new lobby
+     */
     useEffect(() => {
         loadLobbies()
-    }, [user])
+    }, [user.lobbies])
     
     return (
         <CommContext.Provider 

@@ -107,10 +107,10 @@ const getUser = asyncHandler(async (req, res) => {
  */
 const updateUser = asyncHandler(async(req, res) => {
     const user = req.user;
-    const { lobbyId } = req.body;
+    const { lobbies } = req.body;
 
     const update = {
-        lobbies: [...user.lobbies, lobbyId] 
+        lobbies: JSON.parse(lobbies) 
     }
 
     const doc = await User.findByIdAndUpdate(user._id, update)

@@ -7,6 +7,7 @@ const { Lobby } = require("../models/lobbyModel")
 const getLobbyById = asyncHandler(async(req,res) => {
     const { id } = req.params
     const lobbyDoc = await Lobby.findById(id);
+
     if(lobbyDoc) {
         res.status(200).json({
             message: "Lobby found",

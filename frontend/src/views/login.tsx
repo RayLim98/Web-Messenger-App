@@ -4,10 +4,10 @@ import TextButton from '../components/core/buttons/textButton'
 
 import '../App.css'
 import styles from './views.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { H1, H5, H6 } from '../components/core/text'
 
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authProvider'
 import LandingBanner from '../components/composite/banner/landingBanner'
 import {io} from 'socket.io-client'
@@ -16,7 +16,7 @@ const socket = io("http://localhost:3001") ;
 
 const LoginPage = () => {
   const [loading, setloading] = useState(false)
-  const { user, login } = useAuth()
+  const { login } = useAuth()
 
   const onSubmit = async (data: any) => { 
     console.log(data)
@@ -41,15 +41,7 @@ const LoginPage = () => {
         </div>
     </PageWrapper>
 
-  return (
-    <>
-      {
-        user 
-        ? <Navigate to = "/home" replace={true}/>
-        : pageState
-      }
-    </>
-  )
+  return ( pageState )
 }
 
 export default LoginPage

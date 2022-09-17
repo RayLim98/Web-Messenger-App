@@ -13,21 +13,18 @@ import getMessageByLobbyId from '../api/getMessages'
 import MessageI from '../interface/MessageI'
 
 const Home = () => {
-  const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { user } = useAuth();
+  const { isAuthed, user } = useAuth();
   const { socket, sendMessage, currentLobby, lobbyList } = useComm();
 
   // States
   const [textValue, setMessage] = useState<string>("")
   const [messageList, setMessageList] = useState<MessageI[]>([])
 
-  // Navigate back to load screen if user becomes null
-  useEffect(()=> {
-    if(!user) navigate("/")
-    else loadMessages()
-  }, [user, currentLobby])
+  useEffect(() => {
+    loadMessages()
+  }, [currentLobby])
 
   // Listen to incoming messages
   useEffect(() => {
@@ -86,7 +83,7 @@ const Home = () => {
         isMobile
         ? <MobileChatView 
             lobbyTitle={currentLobby.title}
-            userName={user?.userName}
+            userName={user.userName}
             messageList={messageList}
             inputValue={textValue}
             submitMessage={submitMessage}
@@ -95,7 +92,7 @@ const Home = () => {
         : <DesktopChatView
             lobbyTitle={currentLobby.title}
             lobbyList={lobbyList}
-            userName={user?.userName}
+            userName={user.userName}
             messageList={messageList}
             inputValue={textValue}
             submitMessage={submitMessage}

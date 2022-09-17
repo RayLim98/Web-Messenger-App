@@ -3,24 +3,50 @@ import { ObjectId } from 'mongodb';
 import getUserDataApi from '../api/getUser';
 import loginUserApi from '../api/loginUser';
 import registerUserApi from '../api/registerUser';
-import getMessageByLobbyId from '../api/getMessages';
-import { AxiosResponse } from 'axios';
-import { LocalSeeOutlined } from '@mui/icons-material';
 import LobbyI from '../interface/LobbyI';
+import { useNavigate } from 'react-router-dom';
 
-const AuthContext = createContext<any>({})
+const AuthContext = createContext<{
+    user: UserInterface
+    login: (payload:any)=> void
+    register: (payload:any)=> void 
+    setUser: (payload:any)=> void 
+    getUserData: (payload:any)=> void
+    logout: ()=> void
+    isAuthed: boolean
+}>({
+    user: {} as UserInterface,
+    login: ()=> {},
+    register: ()=> {},
+    setUser: ()=> {},
+    getUserData: ()=> {},
+    logout: ()=> {},
+    isAuthed: false
+})
+
+const intialState: UserInterface = {
+    _id: null,
+    userName: "",
+    age: -1,
+    image: "",
+    token: "",
+    lobbies: [],
+}
 
 interface UserInterface {
-    _id: ObjectId
+    _id: ObjectId | null
     userName: string
     age: number
+    image: string
     token: string
-    lobbies: LobbyI[]
+    lobbies: ObjectId[]
 }
 
 const AuthProvider = ({children}:{children:React.ReactNode}) => {
     // user value is a JWT string
-    const [user, setUser] = useState<UserInterface | null>(null);
+    const [user, setUser] = useState<UserInterface>(intialState);
+    const [isAuthed, setIsAuthed] = useState<boolean>(false);
+    const navigate = useNavigate()
 
     useEffect(() => {
         // Check if user has previously logged in
@@ -28,14 +54,21 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
         if(loggedInUser) {
             const userJson = JSON.parse(loggedInUser)
             setUser(userJson);
+            setIsAuthed(true)
         }
     }, [])
+
+    useEffect(() => {
+        if( isAuthed ) navigate('/home') 
+        else navigate('/')
+    }, [isAuthed])
     
     const login = async (payload:any) => {
         try {
             // Save user 
             const {data} = await loginUserApi(payload);
             setUser(data);
+            setIsAuthed(true)
 
             // Store data as a string to avoid VAUGE object output
             localStorage.setItem('user', JSON.stringify(data));
@@ -55,7 +88,8 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
 
     const logout = () => {
         localStorage.clear();
-        setUser(null);
+        setUser({} as UserInterface);
+        setIsAuthed(false);
     }
 
     /**
@@ -78,6 +112,7 @@ const AuthProvider = ({children}:{children:React.ReactNode}) => {
         <AuthContext.Provider
             value={{
                 user, 
+                isAuthed,
                 login, 
                 register, 
                 setUser, 

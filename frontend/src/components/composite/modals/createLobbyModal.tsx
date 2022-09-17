@@ -1,7 +1,7 @@
 import { Stack ,Button,Dialog, TextField, Typography } from '@mui/material'
 import { ObjectID } from 'bson'
 import React, {useState} from 'react'
-import createLobbyApi from '../../../api/lobbyAPI/createlobby'
+import createLobbyApi_ from '../../../api/lobbyAPI/createlobby'
 import updateUserApi from '../../../api/updateUser'
 import { useAuth } from '../../../context/authProvider'
 import { useComm } from '../../../context/commProvider'
@@ -15,7 +15,7 @@ interface Props {
 const CreateLobbyModal = ({open, onClose}: Props) => {
     const [name, setName] = useState("")
     const {user} = useAuth()
-    const { setLobbyList, createLobby } = useComm()
+    const { createLobby } = useComm()
 
     const handleClose = () => {
         onClose(false)
@@ -32,7 +32,6 @@ const CreateLobbyModal = ({open, onClose}: Props) => {
 
                 // Create and update lobby in datebase and local 
                 createLobby(newLobby)
-                setLobbyList((prev) => [...prev, newLobby])
 
                 // Close on finish
                 handleClose()
