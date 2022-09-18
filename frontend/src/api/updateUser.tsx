@@ -1,18 +1,20 @@
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
+import LobbyI from '../interface/LobbyI';
 
 interface Props {
     userName?: string
     image?: string
-    lobbies?: ObjectId[]
+    lobbies?: LobbyI[]
 }
 
-const updateUserApi_ = ({lobbies}: Props, token:string) => {
+const updateUserApi_ = async ({lobbies}: Props, token:string) => {
+    const lobbyIds = lobbies?.map((lobby)=> lobby._id) 
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
     return axios.put('/api/user/update', {
-        lobbies: JSON.stringify(lobbies)
+        lobbies: JSON.stringify(lobbyIds)
      }, config)
 }
 

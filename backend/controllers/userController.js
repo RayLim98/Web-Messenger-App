@@ -108,9 +108,11 @@ const getUser = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async(req, res) => {
     const user = req.user;
     const { lobbies } = req.body;
+    const newLobbies = JSON.parse(lobbies)
 
+    console.log('API Update user: ', newLobbies)
     const update = {
-        lobbies: JSON.parse(lobbies) 
+        lobbies: newLobbies 
     }
 
     const doc = await User.findByIdAndUpdate(user._id, update)

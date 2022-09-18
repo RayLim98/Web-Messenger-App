@@ -7,7 +7,7 @@ import {
     Divider, 
     ListItemText, 
 } from '@mui/material'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 // Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,26 +17,10 @@ import { useAuth } from '../../../context/authProvider';
 // Components
 import UserBanner from '../banner/userBanner'
 import CreateLobbyModal from '../modals/createLobbyModal';
-import MuiListItem from '../../core/listItem-mui/listItem';
+import MuiListButtonItem from '../../core/listItem-mui/muiListButtonItem';
 import DeleteLobbyModal from '../../composite/modals/deleteLobbyModal';
 //interfaces
 import LobbyI from '../../../interface/LobbyI';
-import { ObjectID } from 'bson';
-
-// const lobbies: LobbyI[]= [
-//   {
-//     id: new ObjectID("6312cee1322f306b8f1d1720").toString(),
-//     title: "MyLobby",
-//     author: "raymodnlim",
-//     image: ""
-//   },
-//   {
-//     id: new ObjectID("6312ce58c6a43a065e6d0776").toString(),
-//     title: "Public",
-//     author: "raymondlim",
-//     image: ""
-//   }
-// ]
 
 interface Props {
     open: boolean
@@ -107,13 +91,13 @@ const MobileDrawer = ({open, setOpen}: Props) => {
                 <List sx={{ overflow: "scroll" }}>
                     {
                         lobbyList.map((item, idx)=> ( 
-                            <MuiListItem 
+                            <MuiListButtonItem 
                                 key={idx}
                                 onSelect={()=> handleSelection(item)}
                                 onDelete={()=> handleDelete(item)}
                             >
                                 {item.title}
-                            </MuiListItem>
+                            </MuiListButtonItem>
                          ))
                     }
                 </List>

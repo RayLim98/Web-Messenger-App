@@ -14,7 +14,10 @@ interface Props {
   onSelect: ()=> void
 }
 
-const MuiListItem = ({
+/**
+ * For a list of items thats on a configurable list, with a delete fucntion
+ */
+const MuiListButtonItem = ({
   children,
   onDelete,
   onSelect,
@@ -45,4 +48,4 @@ const MuiListItem = ({
   )
 }
 
-export default MuiListItem
+export default MuiListButtonItem

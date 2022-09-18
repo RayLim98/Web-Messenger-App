@@ -15,7 +15,7 @@ import MessageI from '../interface/MessageI'
 const Home = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { isAuthed, user } = useAuth();
+  const { user } = useAuth();
   const { socket, sendMessage, currentLobby, lobbyList } = useComm();
 
   // States
@@ -44,6 +44,7 @@ const Home = () => {
       author: user.userName,
       createdAt: new Date(Date.now())
     }
+
     // Send payload for socket and API handling
     sendMessage(payload)
     setMessageList((list) => {
@@ -66,7 +67,6 @@ const Home = () => {
       throw new Error("Failed to get message", e)
     }
   }
-
 
   return (
     <Container 

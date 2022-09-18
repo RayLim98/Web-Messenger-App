@@ -24,6 +24,7 @@ const DeleteLobbyModal = ({open, onClose, selection}: Props) => {
         onClose(false)
     }
 
+    console.log('Lobby has been selected: ',selection)
     return (
         <Dialog
             open={open}

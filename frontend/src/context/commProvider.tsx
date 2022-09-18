@@ -51,29 +51,36 @@ const CommProvider = ({children}: CommProviderProps) => {
     }
 
     const loadLobbies = async () => {
+        // Set a list of lobby Ids of type ObjectId
         const lobbyIds = user.lobbies
-        console.log("Load Lobbies", lobbyIds)
 
-        // Grab all lobbies with current users list
-        const lobbyData = await Promise.all(
-            lobbyIds.map(async(lobbyId: ObjectId)=> {
-                try {
-                    const response = await getLobbyByIdApi(lobbyId, user.token)
-                    return response
-                } catch(e: any) {
-                    return e.response
-                }
-            })
-        )
+        let response;
+        try {
+            // Grab all lobbies with current users list
+            response = await Promise.all(
+                lobbyIds.map(async(lobbyId: ObjectId)=> {
+                    try {
+                        const response = await getLobbyByIdApi(lobbyId, user.token)
+                        return response
+                    } catch(e: any) {
+                        return e.response
+                    }
+                })
+            )
+        } catch(e) {
+            console.log('Something went wrong');
+            throw new Error('Failed to get lobbies')
+        }
 
         // Filter the successful responses and get the data
-        const newLobbiesList = lobbyData
+        const newLobbiesList = response
         .filter((res)=> res.status === 200)
         .map((res)=> res.data.data)
 
         // Set Lobbies
         console.trace('Fetched Lobbies', newLobbiesList)
         setLobbyList(lobbies.concat(newLobbiesList))
+
     }
 
     const joinLobby = async (lobby: LobbyI) => {
@@ -96,22 +103,18 @@ const CommProvider = ({children}: CommProviderProps) => {
         try {
             const res = await createLobbyApi_(newLobby, user.token)
             if(res) {
-                // New Lobby list 
-                const newLobbyObjectIds = [...user.lobbies, res.data._id]
+                // Add Lobby to new list 
+                const newLobbyList = [...lobbyList, newLobby];
                 // Update user lobbies field
-                const updateUser = {...user, lobbies: newLobbyObjectIds}
+                const updateUser = {...user, lobbies: newLobbyList.map((lobby)=> lobby._id)}
+
+                // Add new updated lobbylist
+                await updateUserApi_({lobbies: newLobbyList}, user.token)
 
                 // Set updated user details on client and cache it
                 // Store data as a string to avoid VAUGE object output
                 setUser(updateUser)
                 localStorage.setItem("user", JSON.stringify(updateUser))
-
-                // Update user details in the database
-                const prevDoc = await updateUserApi_({ 
-                    lobbies: newLobbyObjectIds 
-                }, user.token)
-
-            console.log("Updated user document: ", prevDoc)
             }
         } catch(e) {
             console.log("Failed to create lobby", e)
@@ -120,10 +123,17 @@ const CommProvider = ({children}: CommProviderProps) => {
 
     const deleteLobby = async (deleteLobby: LobbyI) => {
         try {
+            // Remove lobby from database
             const res = await deleteLobbyApi_(deleteLobby, user.token)
             if(res) {
-                
-                console.log('Lobby has been deleted', res)
+                const newLobbyList = lobbyList.filter((lobby)=> lobby._id !== deleteLobby._id)
+
+                const newUserDoc = {...user, lobbies: newLobbyList.map((lobby)=> lobby._id)}
+                // Remove user document in database
+                await updateUserApi_({lobbies: newLobbyList}, user.token)
+
+                setUser(newUserDoc)
+                localStorage.setItem("user", JSON.stringify(newUserDoc))
             }
         } catch (e) {
                 console.log('Failed to delete lobby', e)
