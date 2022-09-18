@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 // Components
 import { Container, useMediaQuery, useTheme } from '@mui/material'
 import MobileChatView from '../components/composite/messageBox/mobileChatView'
@@ -70,6 +69,7 @@ const Home = () => {
 
   return (
     <Container 
+      disableGutters
       sx={{ 
         backgroundColor: "background.default",
         borderRadius: {

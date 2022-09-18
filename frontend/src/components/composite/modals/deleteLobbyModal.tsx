@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import { Stack ,Button,Dialog, TextField, Typography } from '@mui/material'
-import { useAuth } from '../../../context/authProvider'
+import { Stack ,Button,Dialog, Typography } from '@mui/material'
 import { useComm } from '../../../context/commProvider'
 import LobbyI from '../../../interface/LobbyI'
 
@@ -11,8 +9,6 @@ interface Props {
 }
 
 const DeleteLobbyModal = ({open, onClose, selection}: Props) => {
-    const [name, setName] = useState("")
-    const {user} = useAuth()
     const { deleteLobby } = useComm()
 
     const handleClose = () => {
@@ -37,7 +33,7 @@ const DeleteLobbyModal = ({open, onClose, selection}: Props) => {
         >
             <Stack sx={{padding: "1rem", pr: "2rem", pl: "2rem"}}>
                 <Typography variant='h6' sx={{mb: "0.5rem"}} color={"text.secondary"}>
-                    Delete Lobby
+                    Delete Lobby?
                 </Typography>
                 <Typography variant='h6' sx={{mb: "0.5rem"}} color={"text.secondary"}>
                     {selection.title}

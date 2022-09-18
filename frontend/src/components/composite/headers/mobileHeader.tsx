@@ -11,9 +11,11 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 
 interface Props {
     lobbyTitle: string
+    disableDrawer?: boolean
+    relative?: boolean
 }
 
-const MobileHeader = ({lobbyTitle}: Props) => {
+const MobileHeader = ({lobbyTitle, disableDrawer, relative}: Props) => {
     const [drawer, setDrawer] = useState(false)
     const { toggleMode } = useMode()
     const { palette } = useTheme()
@@ -21,13 +23,17 @@ const MobileHeader = ({lobbyTitle}: Props) => {
     return (
         <>
             <AppBar 
+                position={relative ? 'relative': 'fixed'} 
                 sx={{
                     backgroundColor: 'primary.main'
                 }}>
                     <Toolbar>
-                        <IconButton size="large" onClick={()=> setDrawer(true)}>
-                            <MenuIcon fontSize="inherit"/>
-                        </IconButton>
+                        {
+                            !disableDrawer && 
+                            <IconButton size="large" onClick={()=> setDrawer(true)}>
+                                <MenuIcon fontSize="inherit"/>
+                            </IconButton>
+                        }
                         <Box sx={{ flex: 1}}>
                             <Typography variant={"h4"}>
                                 {lobbyTitle}

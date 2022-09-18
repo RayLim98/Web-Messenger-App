@@ -1,16 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { io, Socket } from "socket.io-client"
+// Hooks
 import { useAuth } from './authProvider';
-import { useNavigate } from "react-router-dom"
 
-import LobbyI from '../interface/LobbyI';
-import MessageI from '../interface/MessageI';
+// API
 import createMessageApi from '../api/createMessage';
 import createLobbyApi_ from '../api/lobbyAPI/createlobby';
 import updateUserApi_ from '../api/updateUser';
-import { ObjectId, ObjectID } from 'bson';
 import getLobbyByIdApi from '../api/lobbyAPI/getlobby';
 import deleteLobbyApi_ from '../api/lobbyAPI/deleteLobby';
+
+// Interfaces
+import { ObjectId, ObjectID } from 'bson';
+import LobbyI from '../interface/LobbyI';
+import MessageI from '../interface/MessageI';
 
 const socket = io("http://localhost:3001")
 
@@ -31,11 +34,9 @@ const CommContext = createContext<ContextProps>({
 
 /**
  * @description Socket and database state handler. Abstration of message logic for socket and api/database layer 
- * @returns 
  */
 const CommProvider = ({children}: CommProviderProps) => {
     const { user, setUser } = useAuth()
-    const navigate = useNavigate()
     const [isConnected, setIsConnected] = useState<boolean>(false)
     const [lobbyList, setLobbyList] = useState<LobbyI[]>(lobbies)
     const [currentLobby, setLobby] = useState<LobbyI>({} as LobbyI)
@@ -80,7 +81,6 @@ const CommProvider = ({children}: CommProviderProps) => {
         // Set Lobbies
         console.trace('Fetched Lobbies', newLobbiesList)
         setLobbyList(lobbies.concat(newLobbiesList))
-
     }
 
     const joinLobby = async (lobby: LobbyI) => {
@@ -105,6 +105,7 @@ const CommProvider = ({children}: CommProviderProps) => {
             if(res) {
                 // Add Lobby to new list 
                 const newLobbyList = [...lobbyList, newLobby];
+
                 // Update user lobbies field
                 const updateUser = {...user, lobbies: newLobbyList.map((lobby)=> lobby._id)}
 
@@ -123,13 +124,15 @@ const CommProvider = ({children}: CommProviderProps) => {
 
     const deleteLobby = async (deleteLobby: LobbyI) => {
         try {
-            // Remove lobby from database
             const res = await deleteLobbyApi_(deleteLobby, user.token)
             if(res) {
+                // Remove lobby from local list
                 const newLobbyList = lobbyList.filter((lobby)=> lobby._id !== deleteLobby._id)
 
+                // Update Local user document
                 const newUserDoc = {...user, lobbies: newLobbyList.map((lobby)=> lobby._id)}
-                // Remove user document in database
+                
+                // Update user document in database
                 await updateUserApi_({lobbies: newLobbyList}, user.token)
 
                 setUser(newUserDoc)

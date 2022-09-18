@@ -1,6 +1,5 @@
 import { 
     Drawer, 
-    Typography, 
     ListItem, 
     List, 
     ListItemButton, 
@@ -33,7 +32,6 @@ const MobileDrawer = ({open, setOpen}: Props) => {
     const [createModal, setCreateModal] = useState(false)
     const [deleteModal, setDeleteModel] = useState(false)
     const [selection, setSelection] = useState<LobbyI>(lobbyList[0]);
-
 
     const handleSelection = (selection: LobbyI) => {
         joinLobby(selection)

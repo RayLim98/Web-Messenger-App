@@ -1,4 +1,4 @@
-import { PaletteOptions } from '@mui/material';
+import { PaletteOptions, Palette, PaletteColor} from '@mui/material';
 import { ThemeOptions } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
@@ -13,6 +13,10 @@ declare module '@mui/material/styles' {
         status?: {
         danger?: string;
         };
+    }
+    interface Palette {
+        inputField: PaletteColor
+        clickableText: PaletteColor
     }
     interface PaletteOptions {
         inputField?: {
@@ -56,7 +60,7 @@ export const dark: PaletteOptions = {
   },
   background: {
     default: '#131313',
-    paper: '#1565c0'
+    paper: '#353535'
   },
   text: {
     primary: '#ffffff',
