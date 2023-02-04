@@ -1,10 +1,8 @@
-import { ObjectId } from "mongodb"
-
 interface PublicLobbyI {
-    id: string
-    title: string
-    author: string
-    image: string
+  id: string;
+  title: string;
+  author: string;
+  image: string;
 }
 
-export default PublicLobbyI 
+export default PublicLobbyI;
