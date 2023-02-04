@@ -15,7 +15,8 @@ import { ObjectId, ObjectID } from 'bson';
 import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 
-const socket = io("http://localhost:3001")
+const aws = "https://main.d3f0197apfsodw.amplifyapp.com/"
+const socket = io(aws)
 
 const CommContext = createContext<ContextProps>({
     sendMessage: () => {},
