@@ -1,14 +1,11 @@
-import PageWrapper from '../components/core/wrapper/pageWrapper'
-import TextButton from '../components/core/buttons/textButton'
 import '../App.css'
-import { H6 } from '../components/core/text'
+import PageWrapper from '../components/core/wrapper/pageWrapper'
 import styles from './views.module.css'
 
 import RegisterForm from '../components/composite/forms/registerForm'
 import { useState } from 'react'
 import { useAuth } from '../context/authProvider'
 import LandingBanner from '../components/composite/banner/landingBanner'
-import PrimText from '../components/core/text/primText'
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
@@ -17,8 +14,8 @@ const RegisterPage = () => {
 
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    if(data.password == data.passwordVerify) {
+    console.log("Submitted", data);
+    if(data.password === data.passwordVerify) {
       setIsVerify(true);
       setLoading(true);
       await register(data);

@@ -40,19 +40,19 @@ const RegisterForm: React.FC<Props> = ({onSubmit, isVerified}) => {
         />
         {errors.password && <span>This field is required</span>}
         <PrimTextInput
-          keyValue='verifyPassword'
+          keyValue='passwordVerify'
           placeholder='Re-password'
           register={register}
           required={true}
           password={true}
         />
-        {errors.password && <span>This field is required</span>}
+        {errors.passwordVerify && <span>This field is required</span>}
         <NumInput
           placeholder='age'
           register={register}
           required={true}
         />
-        {errors.password && <span>This field is required</span>}
+        {errors.age && <span>This field is required</span>}
         <PrimButton type='submit'>
           Create Account
         </PrimButton>

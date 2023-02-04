@@ -1,5 +1,5 @@
 # Description
-Full stack solution for logging in with basic access to private user data
+Full stack solution for logging in with basic access to private user data.
 
 ## Learning outcomes 
 * Backend, REST api development using Nodejs w/ express
@@ -7,3 +7,4 @@ Full stack solution for logging in with basic access to private user data
 * Backend with JWT token Authentication
 * Frontend development with authentication, registering, login flow
 * Frontend development with react's **CSS modules**
+* CSS framework with Material UI with styled-components api for styling

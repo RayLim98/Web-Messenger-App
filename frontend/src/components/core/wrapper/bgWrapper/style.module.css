@@ -1,9 +1,2 @@
 .mainWrapper {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: rebeccapurple;
-    padding: 2rem;
-    box-sizing: border-box;
 }

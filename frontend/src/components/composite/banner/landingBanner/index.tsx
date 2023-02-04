@@ -13,6 +13,7 @@ const LandingBanner: React.FC<Props> = ({title}) => {
         <div className={styles.items}>
           <H1> {title} </H1>
         </div>
+
         <div className={styles.description}>
           <PrimText>
             Description here

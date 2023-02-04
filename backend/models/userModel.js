@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const { lobbySchema } = require("./lobbyModel")
 const userSchema = mongoose.Schema({
     userName: {
         type: String,
@@ -16,11 +16,13 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add number']
     },
+    lobbies: {
+        type: [mongoose.Schema.Types.ObjectId],
+    },
     }, 
     {
         timestamps: true
     }
 )
-
 
 module.exports = mongoose.model('User', userSchema)

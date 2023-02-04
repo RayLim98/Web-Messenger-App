@@ -2,7 +2,6 @@ import React from 'react'
 import styles from './style.module.css'
 import { TextProps } from './interface'
 
-
 const H1: React.FC<TextProps> = ({
     children,
     hover,
