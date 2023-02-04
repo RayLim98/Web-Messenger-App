@@ -138,12 +138,16 @@ const deleteUser = asyncHandler(async(req, res) => {
     // TODO
     throw new Error("has not been implemented")
 })
+
+// TODO: Set key as env variable 
+const secret = "key" 
+
 /**
  * @description Generate JWT as an object, with a field ID inside
  * @param id
  */
 const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {
+    return jwt.sign({id}, secret , {
         expiresIn: '10d'
     })
 }
