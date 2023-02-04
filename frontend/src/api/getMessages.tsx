@@ -1,5 +1,5 @@
-import axios from 'axios';
 import LobbyI from '../interface/LobbyI';
+import api from './api';
 
 /**
  * @description Gets data user data if use if token is valid
@@ -10,7 +10,7 @@ const getMessageByLobbyId = async (currentLobby: LobbyI, token: string) => {
         headers: { Authorization: `Bearer ${token}` }
     }
 
-    return axios.get(
+    return api.get(
         `/api/test/${currentLobby._id}`, 
         config, 
     )

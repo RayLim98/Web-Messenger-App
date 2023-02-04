@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './api';
 
 /**
  * @param {string} token JWT token for authentication
@@ -8,7 +8,7 @@ const getUserDataApi = (token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
-    return axios.get(
+    return api.get(
         '/api/user/',
         config
     )

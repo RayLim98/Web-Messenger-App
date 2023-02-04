@@ -1,5 +1,5 @@
-import axios from 'axios';
 import MessageI from '../interface/MessageI';
+import api from './api';
 
 /**
  * @description Gets data user data if use if token is valid
@@ -12,7 +12,7 @@ const createMessageApi = (payload: MessageI, token: string ) => {
         headers: { Authorization: `Bearer ${token}` }
     }
 
-    return axios.post(
+    return api.post(
         '/api/test/', 
         { ...message }
         , config

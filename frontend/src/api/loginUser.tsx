@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './api';
 
 interface Props {
     userName: string
@@ -11,7 +11,7 @@ interface Props {
  */
 const loginUserApi = (payload: Props) => {
     const { userName, password } = payload;
-    return axios.post('/api/user/login',{
+    return api.post('/api/user/login',{
         userName,
         password,
     })

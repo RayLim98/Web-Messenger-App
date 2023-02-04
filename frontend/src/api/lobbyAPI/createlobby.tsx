@@ -1,5 +1,6 @@
 import axios from 'axios';
 import LobbyI from '../../interface/LobbyI';
+import api from '../api';
 
 /**
  * 
@@ -10,7 +11,7 @@ const createLobbyApi_ = (payload: LobbyI, token:string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     }
-    return axios.post('/api/lobby', payload, config)
+    return api.post('/api/lobby', payload, config)
 }
 
 export default createLobbyApi_

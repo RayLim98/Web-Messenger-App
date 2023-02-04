@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from './api';
 
 interface Props {
     userName: string
@@ -12,7 +13,7 @@ interface Props {
  */
 const registerUserApi = (payload: Props) => {
     const { userName, password, age } = payload;
-    return axios.post('/api/user/register',{
+    return api.post('/api/user/register',{
         userName,
         password,
         age,

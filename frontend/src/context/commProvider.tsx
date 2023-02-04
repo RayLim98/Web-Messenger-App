@@ -15,7 +15,6 @@ import { ObjectId, ObjectID } from 'bson';
 import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 
-const aws = "https://main.d3f0197apfsodw.amplifyapp.com/"
 const server = "http://localhost:3001"
 const socket = io(server)
 

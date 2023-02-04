@@ -1,5 +1,6 @@
 import axios from "axios";
 import LobbyI from "../interface/LobbyI";
+import api from "./api";
 
 interface Props {
   userName?: string;
@@ -12,7 +13,7 @@ const updateUserApi_ = async ({ lobbies }: Props, token: string) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  return axios.put(
+  return api.put(
     "/api/user/update",
     {
       lobbies: JSON.stringify(lobbyIds),
