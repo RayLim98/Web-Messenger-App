@@ -28,7 +28,8 @@ app.use("/api/lobby", require("./routers/lobbyRouter"));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://main.d3f0197apfsodw.amplifyapp.com/",
+    // origin: "http://localhost:3000",
     methods: ["POST", "GET"],
   },
 });
