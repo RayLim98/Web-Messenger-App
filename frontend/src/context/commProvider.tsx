@@ -16,7 +16,8 @@ import LobbyI from '../interface/LobbyI';
 import MessageI from '../interface/MessageI';
 
 const aws = "https://main.d3f0197apfsodw.amplifyapp.com/"
-const socket = io(aws)
+const server = "http://localhost:3001"
+const socket = io(server)
 
 const CommContext = createContext<ContextProps>({
     sendMessage: () => {},
