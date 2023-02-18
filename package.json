@@ -4,8 +4,8 @@
   "description": "frontend and backend development for users logging in",
   "main": "index.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "server": "nodemon backend/server.js",
+    "start": "node ./backend/server.js",
+    "server": "nodemon ./backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@types/mongodb": "^4.0.7",
+    "nodemon": "^2.0.20",
     "react-dropzone": "^14.2.2"
   }
 }

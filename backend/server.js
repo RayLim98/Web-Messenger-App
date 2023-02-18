@@ -24,15 +24,29 @@ app.use("/api/test", require("./routers/testRouter"));
 app.use("/api/user", require("./routers/userRouter"));
 app.use("/api/lobby", require("./routers/lobbyRouter"));
 
+const devOrigin = "http://localhost:3000/";
+
 // Declare as a http server
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: "https://main.d3f0197apfsodw.amplifyapp.com/",
-    // origin: "http://localhost:3000",
+    origin:
+      process.env.NODE_ENV === "development"
+        ? devOrigin
+        : "https://main.d3f0197apfsodw.amplifyapp.com",
     methods: ["POST", "GET"],
   },
 });
+
+if (process.env.NODE_ENV === "development") {
+  console.log(
+    `Running in ${"development".green} mode. Origin set to ${
+      devOrigin.green.underline
+    }`
+  );
+}
+console.log("Server:", process.env.NODE_ENV);
 
 // Define events
 io.on("connection", (socket) => {
