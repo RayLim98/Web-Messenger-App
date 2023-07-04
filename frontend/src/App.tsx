@@ -13,6 +13,7 @@ const ModeContext = createContext({
 
 function App() {
   const [mode, setMode] = useState<PaletteMode>('light')
+  // Hello world from git 
 
   const toggleMode = () => setMode(mode === 'light'? 'dark': 'light' )
 
